@@ -32,7 +32,7 @@
             android:text="燕池"
             />
     </RelativeLayout>
-    <view
+        <View
         android:layout_marginLeft="8dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
