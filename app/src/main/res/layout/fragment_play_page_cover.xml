@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lrc="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:background="@drawable/exmaple_cover"/>
+
+    <me.wcy.lrcview.LrcView
+        android:layout_marginTop="20dp"
+        android:id="@+id/lrc_view_single"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        lrc:lrcAnimationDuration="1000"
+        lrc:lrcCurrentTextColor="@color/white"
+        lrc:lrcDividerHeight="25dp"
+        lrc:lrcNormalTextColor="@color/white"
+        lrc:lrcLabel="暂无歌词"
+        lrc:lrcTextSize="16sp" />
+</LinearLayout>

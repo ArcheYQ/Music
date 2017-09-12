@@ -1,4 +1,4 @@
-package com.music.Activity;
+package com.music.activity;
 
 import android.app.Activity;
 import android.support.annotation.LayoutRes;

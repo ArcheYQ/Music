@@ -7,8 +7,11 @@
             android:layout_height="45dp"
             android:background="#edebeb">
                 <EditText
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1"
+                    android:id="@+id/et_findlocal"
                     android:textSize="13sp"
-                    android:hint="搜索本地歌曲"
+                    android:hint="共6首，搜索本地歌曲"
                     android:gravity="center"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"

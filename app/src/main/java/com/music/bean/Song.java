@@ -1,10 +1,12 @@
 package com.music.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by 雅倩宝宝 on 2017/9/7.
  */
 
-public class Song {
+public class Song implements Serializable {
     public String getSinger() {
         return singer;
     }

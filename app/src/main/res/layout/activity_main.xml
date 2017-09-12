@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.music.MainActivity"
+    tools:context="com.music.activity.MainActivity"
     android:orientation="vertical">
     <android.support.v7.widget.Toolbar
         android:background="@drawable/bgmain"
@@ -39,7 +39,7 @@
         <View
         android:layout_width="1dp"
         android:layout_height="20dp"
-        android:background="#edebeb"/>
+        android:background="#e2dada"/>
         <TextView
             android:id="@+id/tv_network"
             android:textColor="#000000"
