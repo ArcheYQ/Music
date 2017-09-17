@@ -9,8 +9,8 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp">
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +29,7 @@
             android:progressDrawable="@drawable/seek_bar_progress_style"
             android:thumb="@mipmap/ic_seek_bar_progress_btn" />
         <TextView
+
             android:id="@+id/tv_total_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,12 +44,15 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:clickable="true"
+            android:longClickable="true"
             android:id="@+id/iv_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/play_mode_level_list" />
+            android:layout_centerVertical="true" />
         <ImageView
+            android:clickable="true"
+            android:longClickable="true"
             android:id="@+id/iv_prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,6 +61,8 @@
             android:src="@drawable/play_btn_prev_selector" />
 
         <ImageView
+            android:clickable="true"
+            android:longClickable="true"
             android:id="@+id/iv_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +70,8 @@
             android:src="@drawable/play_btn_play_pause_selector" />
 
         <ImageView
+            android:clickable="true"
+            android:longClickable="true"
             android:id="@+id/iv_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

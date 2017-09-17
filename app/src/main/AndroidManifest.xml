@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,17 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".service.MusicService"
+            android:name="com.music.service.MusicService"
             android:exported="false" />
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="com.music.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MusicActivity"></activity>
+
+        <activity android:name="com.music.activity.MusicActivity"/>
     </application>
 
 </manifest>

@@ -35,18 +35,19 @@ public class LocalFragment extends Fragment {
     ArrayList<Song> song;
     @Bind(R.id.et_findlocal)
     EditText etFindlocal;
-    private boolean isPause; //记录当前播放器的状态
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local, container, false);
         ButterKnife.bind(this, view);
         Log.i("LocalFragment", "11111111111111");
-        musicAdapter = new MusicAdapter(MusicUtil.getInstance().getLocalMusci(getActivity()),true,getContext());
+        musicAdapter = new MusicAdapter(MusicUtil.getInstance().getLocalMusci(getActivity()),getContext());
         rvFragmentLocal.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFragmentLocal.setItemAnimator(new DefaultItemAnimator());
         rvFragmentLocal.setAdapter(musicAdapter);
-        etFindlocal.setHint("共"+musicAdapter.getListCount()+"首，搜索本地歌曲");
+        etFindlocal.setHint("共"+MusicUtil.getInstance().getListCount()+"首，搜索本地歌曲");
         etFindlocal.setCursorVisible(false);
         etFindlocal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,9 +68,10 @@ public class LocalFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                musicAdapter.SearchSong(etFindlocal.getText().toString());
+                musicAdapter.setList(MusicUtil.getInstance().SearchSong(etFindlocal.getText().toString()));
             }
         });
+
         return view;
     }
 

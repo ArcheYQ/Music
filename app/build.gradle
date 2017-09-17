@@ -4,6 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.music"
         minSdkVersion 14
         targetSdkVersion 26
@@ -36,6 +37,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.github.niorgai:StatusBarCompat:2.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'me.wcy:lrcview:1.4.2'
     testCompile 'junit:junit:4.12'
 }
