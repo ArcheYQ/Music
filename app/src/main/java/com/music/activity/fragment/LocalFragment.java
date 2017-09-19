@@ -1,6 +1,8 @@
 package com.music.activity.fragment;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.music.R;
 import com.music.adapter.MusicAdapter;
 import com.music.bean.Song;
 import com.music.util.MusicUtil;
+import com.zhy.m.permission.MPermissions;
+import com.zhy.m.permission.PermissionDenied;
+import com.zhy.m.permission.PermissionGrant;
 
 import java.util.ArrayList;
 
@@ -43,6 +49,7 @@ public class LocalFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_local, container, false);
         ButterKnife.bind(this, view);
         Log.i("LocalFragment", "11111111111111");
+        MPermissions.requestPermissions(LocalFragment.this, 4, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         musicAdapter = new MusicAdapter(MusicUtil.getInstance().getLocalMusci(getActivity()),getContext());
         rvFragmentLocal.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFragmentLocal.setItemAnimator(new DefaultItemAnimator());
@@ -75,6 +82,22 @@ public class LocalFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    @PermissionGrant(4)
+    public void requestContactSuccess()
+    {
+
+    }
+
+    @PermissionDenied(4)
+    public void requestContactFailed()
+    {
+        Toast.makeText(getActivity(), "请给予权限~", Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

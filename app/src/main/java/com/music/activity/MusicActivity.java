@@ -79,7 +79,6 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         ButterKnife.bind(this);
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new LrcFragment());
-//        fragments.add(new CoverFragment());
         adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         vpMusciPlay.setAdapter(adapter);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -249,29 +248,30 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
          if(newSong ==null)
              return;
          Log.i("song2",""+newSong.getSinger());
+         sbProgress.setMax((int) newSong.getDuration());
          tvTotalTime.setText(formatTime("mm:ss",newSong.getDuration()));
          tvTitle.setText(newSong.getSong());
          tvSinger.setText(newSong.getSinger());
-         timerTask = new TimerTask() {
-             @Override
-             public void run() {
-                 if(isSeekBarChanging==true) {
-                     return;
-                 }
-
-                 sbProgress.setProgress(MusicUtil.getInstance().getCurrentPosition());
-                 runOnUiThread(new Runnable() {
-                     @Override
-                     public void run() {
-                         tvCurrentTime.setText(formatTime("mm:ss",MusicUtil.getInstance().getCurrentPosition()));
-                     }
-                 });
-             }
-
-         };
-         timer = new Timer();
-
-         timer.schedule(timerTask, 0, 500);
+//         timerTask = new TimerTask() {
+//             @Override
+//             public void run() {
+//                 if(isSeekBarChanging==true) {
+//                     return;
+//                 }
+//
+//                 sbProgress.setProgress(MusicUtil.getInstance().getCurrentPosition());
+//                 runOnUiThread(new Runnable() {
+//                     @Override
+//                     public void run() {
+//                         tvCurrentTime.setText(formatTime("mm:ss",MusicUtil.getInstance().getCurrentPosition()));
+//                     }
+//                 });
+//             }
+//
+//         };
+//         timer = new Timer();
+//
+//         timer.schedule(timerTask, 0, 500);
      }
 //     private ServiceConnection connection = new ServiceConnection() {
 //         @Override

@@ -26,7 +26,7 @@ public class MusicUtil{
     private boolean isPrepare = false;
     private static MediaPlayer mediaPlayer;
     private static MusicUtil musicUtils;
-    private List<Song> list;
+    private List<Song> list;//本地歌曲数据
     /**
      * 顺序播放
      */
@@ -67,6 +67,7 @@ public class MusicUtil{
     public int getPreSongPosition(){
         return preSongPosition;
     }
+    //获得一个MusicUtil实例
     public synchronized static MusicUtil getInstance(){
         if (musicUtils == null) {
             musicUtils = new MusicUtil();

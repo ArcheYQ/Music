@@ -12,7 +12,6 @@ import com.music.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.wcy.lrcview.LrcView;
 
 /**
  * Created by 雅倩宝宝 on 2017/9/11.
@@ -21,15 +20,13 @@ import me.wcy.lrcview.LrcView;
 public class CoverFragment extends Fragment {
     @Bind(R.id.iv_cover)
     ImageView ivCover;
-    @Bind(R.id.lrc_view_single)
-    LrcView lrcViewSingle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_play_page_cover, container, false);
-        ButterKnife.bind(this, super.onCreateView(inflater, container, savedInstanceState));
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view1 = inflater.inflate(R.layout.fragment_play_page_cover, container, false);
+        ButterKnife.bind(this, view1);
+        return view1;
     }
 
     @Override

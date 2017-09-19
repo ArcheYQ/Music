@@ -7,6 +7,41 @@ import java.io.Serializable;
  */
 
 public class Song implements Serializable {
+
+
+    /**
+     * 歌手
+     */
+    private String singer;
+    /**
+     * 歌曲名称
+     */
+    private String song;
+    /**
+     * 地址
+     */
+    private String path;
+    /**
+     * 长度
+     */
+    private long duration;
+    /**
+     * 大小
+     */
+    private long size;
+    /**
+     * 顺序
+     */
+    private int position;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getSinger() {
         return singer;
     }
@@ -55,38 +90,4 @@ public class Song implements Serializable {
         this.position = position;
     }
 
-    /**
-     * 歌手
-     */
-    private String singer;
-    /**
-     * 歌曲名称
-     */
-    private String song;
-    /**
-     * 地址
-     */
-    private String path;
-    /**
-     * 长度
-     */
-    private long duration;
-    /**
-     * 大小
-     */
-    private long size;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * 顺序
-     */
-    private String id;
-    private int position;
 }
