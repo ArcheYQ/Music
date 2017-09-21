@@ -26,6 +26,7 @@ public class MusicUtil{
     private boolean isPrepare = false;
     private static MediaPlayer mediaPlayer;
     private static MusicUtil musicUtils;
+
     private List<Song> list;//本地歌曲数据
     /**
      * 顺序播放
@@ -147,6 +148,7 @@ public class MusicUtil{
         mediaPlayer.pause();
     }
     public void playMusic(Song song){
+
         if(isPrepare){
             return;
         }
@@ -162,16 +164,18 @@ public class MusicUtil{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             mediaPlayer.start();
             isPrepare = false;
             currentSongPosition = song.getPosition();
-            if(currentSongPosition == -1){
-            preSongPosition = currentSongPosition;}
+            if (currentSongPosition == -1) {
+                preSongPosition = currentSongPosition;
+            }
+
     }
     public void clean() {
         mediaPlayer.stop();
         mediaPlayer.release();
+
     }
     public int getDuration(){
         return mediaPlayer.getDuration();

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Music</string>
+    <string name="music_fenlei_xingge">新歌</string>
+    <string name="msuic_fenlei_rege">热歌</string>
+    <string name="music_fenlei_net">网络歌曲</string>
+    <string name="music_fenlei_oumei">欧美</string>
+    <string name="music_fenlei_gantai">港台</string>
+    <string name="music_fenlei_liuxing">流行</string>
+    <string name="music_fenlei_Kge">K歌金曲</string>
+    <string name="music_fenlei_yinyueren">音乐人</string>
+    <string name="music_fenlei_neidi">内地</string>
 </resources>

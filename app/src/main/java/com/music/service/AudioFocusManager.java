@@ -19,7 +19,7 @@ public class AudioFocusManager implements AudioManager.OnAudioFocusChangeListene
 
     public AudioFocusManager(@NonNull  MusicService MusicService) {
         mMusicService = MusicService;
-        mAudioManager = (AudioManager) mMusicService.getSystemService(AUDIO_SERVICE);
+        mAudioManager = (AudioManager) MusicService.getSystemService(AUDIO_SERVICE);
     }
 
     public boolean requestAudioFocus() {

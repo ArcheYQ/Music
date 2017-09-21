@@ -3,6 +3,7 @@ package com.music.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ public class MusicService extends Service {
      */
     public static final String NEXTMUSIC = "2hd3";
     private PowerManager.WakeLock wakeLock = null; //电源锁
+
 
     private void acquireWakeLock() {
         if (null == wakeLock) {
@@ -94,6 +96,11 @@ public class MusicService extends Service {
 
 
         return super.onStartCommand(intent, flags, startId);
+    }
+    public class MusicBinder extends Binder {
+        public MusicService getService() {
+            return MusicService.this;
+        }
     }
 
 

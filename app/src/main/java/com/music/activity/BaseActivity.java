@@ -1,12 +1,15 @@
 package com.music.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.music.R;
 
@@ -19,6 +22,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public Activity mActivity;
+    private Dialog progressDialog;
     public Toolbar mToolbar;
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -33,7 +37,35 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mActivity = this;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 
+            case android.R.id.home:
+                super.onBackPressed();//返回
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+    public void showProgressDialog(){
+        if (progressDialog==null){
+            progressDialog = new Dialog(this,R.style.Pro);
+            progressDialog.setContentView(R.layout.dialog_loading);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            TextView msg = (TextView) progressDialog.findViewById(R.id.id_tv_loadingmsg);
+            msg.setText("(σ'・д・)σ");
+            progressDialog.show();
+        }
+        progressDialog.show();
+    }
+
+    public void dissmiss(){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+        }
+    }
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
         super.setContentView(view, params);
@@ -70,7 +102,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.white_back);
+            actionBar.setHomeAsUpIndicator(R.mipmap.white_back);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("");
         }
