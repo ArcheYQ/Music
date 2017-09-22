@@ -43,6 +43,7 @@ dependencies {
     compile 'me.wcy:lrcview:1.4.2'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'//HTTP访问网络
     testCompile 'junit:junit:4.12'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     apt 'com.zhy:mpermission-compiler:1.0.0'
     compile 'com.google.code.gson:gson:2.7'
 }

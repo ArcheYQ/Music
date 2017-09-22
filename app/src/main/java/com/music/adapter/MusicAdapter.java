@@ -22,14 +22,10 @@ import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder>{
     List<Song> list;
-    List<Song> allList;
-    Boolean isfirst;
 
     private Context context;
 
-    public List<Song> getAllList(){
-        return allList;
-    }
+
     public MusicAdapter (List<Song> list,Context context) {
         this.list = list;
         this.context = context;
