@@ -101,6 +101,9 @@ public class MainActivity extends com.music.activity.BaseActivity {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
+
+
     @OnClick({R.id.tv_local, R.id.tv_network})
     public void onViewClicked(View view) {
         switch (view.getId()) {

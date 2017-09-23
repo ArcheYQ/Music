@@ -30,27 +30,44 @@
             android:layout_height="30dp"
             android:background="@drawable/find"/>
     </LinearLayout>
-    <GridView
-        android:id="@+id/main_gridview"
+    <RelativeLayout
+        android:id="@+id/rl_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:horizontalSpacing="0dp"
-        android:numColumns="3"
-        android:scrollbars="none"
-        android:verticalSpacing="0dp" >
-    </GridView>
+        android:layout_height="wrap_content">
+        <GridView
+            android:id="@+id/main_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:horizontalSpacing="0dp"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:verticalSpacing="0dp" >
+        </GridView>
+    </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_translateAnimation"
+            android:layout_gravity="right"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/less" />
+
     <View
+        android:id="@+id/vv_xian"
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:background="#edebeb"/>
-
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/sr_fragment_net"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:id="@+id/rv_net_song"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

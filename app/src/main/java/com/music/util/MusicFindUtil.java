@@ -17,12 +17,21 @@ import okhttp3.Response;
  */
 
 public class MusicFindUtil {
-    public static List<MusicFind> list2;
-    public static int totalPage;
-    public static String allPages;
+    private static List<MusicFind> list2;
+    private static List<MusicFind> totalList;
+    private static int totalPage;
+    private static String allPages;
+    private static MusicFindUtil musicFindUtil;
+    public synchronized static MusicFindUtil getInstance(){
+        if (musicFindUtil == null) {
+            musicFindUtil = new MusicFindUtil();
+        }
+        return musicFindUtil;
+    }
     public int getPage(){
         try {
             totalPage =Integer.parseInt(allPages);
+            Log.i("TAG3","totalPage"+totalPage);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -41,9 +50,10 @@ public class MusicFindUtil {
             Log.i("TAG3","showapi_res_body"+showapi_res_body);
             JSONObject jsonObject3 = new JSONObject(showapi_res_body);
             String pagebean = jsonObject3.getString("pagebean");
-            Log.i("TAG3","pagebean"+pagebean);
+
             JSONObject jsonObject4 = new JSONObject(pagebean);
             allPages = jsonObject4.getString("allPages");
+            Log.i("TAG3","allPages"+allPages);
             String contentlist = jsonObject4.getString("contentlist");
             Log.i("TAG3","contentlist"+contentlist);
             JSONArray jsonArray = new JSONArray(contentlist);
@@ -56,6 +66,7 @@ public class MusicFindUtil {
                 musicfind.setDownUrl(jsonObject5.getString("downUrl"));
                 musicfind.setUrl(jsonObject5.getString("m4a"));
                 list2.add(musicfind);
+                totalList.add(musicfind);
                 Log.i("TAG3","list");
             }
         }catch (Exception e)
@@ -64,5 +75,8 @@ public class MusicFindUtil {
         }
 
             return list2;
+    }
+    public void deleteDate(){
+        totalList = new ArrayList<>();
     }
 }

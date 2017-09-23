@@ -30,7 +30,14 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
     public FindMusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new FindMusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_music, parent, false));
     }
-
+    public void addData(List<MusicFind> list){
+        for (MusicFind musicFind : list) {
+            musicFinds.add(musicFind);
+        }
+    }
+    public void addDataChange(){
+        notifyItemInserted(getItemCount()-1);
+    }
     @Override
     public void onBindViewHolder(FindMusicViewHolder holder, int position) {
     holder.load(musicFinds.get(position),context);
