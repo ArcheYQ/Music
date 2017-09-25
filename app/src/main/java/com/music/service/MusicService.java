@@ -1,8 +1,11 @@
 package com.music.service;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -16,8 +19,11 @@ import com.music.util.MusicUtil;
  */
 
 public class MusicService extends Service {
-
-
+    private final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
+    private final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
+    private final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.Pre";
+    private MusicBroadCast musicBroadCast = null;
+    private MusicNotification musicNotifi = null;
     /**
      * 播放音乐
      */
@@ -39,6 +45,7 @@ public class MusicService extends Service {
     public static final String NEXTMUSIC = "2hd3";
     private PowerManager.WakeLock wakeLock = null; //电源锁
 
+    private Intent intent1 = new Intent("com.example.communication.CHANGE");
 
     private void acquireWakeLock() {
         if (null == wakeLock) {
@@ -64,6 +71,19 @@ public class MusicService extends Service {
 
     @Override
     public void onCreate() {
+        // 初始化通知栏
+        musicNotifi = MusicNotification.getMusicNotification(getApplicationContext());
+        musicNotifi.setContext(getBaseContext());
+        musicNotifi
+                .setManager((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+        musicNotifi.onCreateMusicNotifi();
+        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+        musicBroadCast = new MusicBroadCast();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_NEXT);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_PRE);
+        registerReceiver(musicBroadCast, filter);
 
         super.onCreate();
     }
@@ -73,6 +93,8 @@ public class MusicService extends Service {
         super.onDestroy();
         releseWakeLock();
         MusicUtil.getInstance().clean();
+        unregisterReceiver(musicBroadCast);
+
     }
 
     @Override
@@ -81,16 +103,19 @@ public class MusicService extends Service {
         switch (intent.getStringExtra("action")) {
             case COMPLETE:
                 MusicUtil.getInstance().prePlayOrNextPlay();
+                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
                 break;
             case PLAYORPAUSE:
                 MusicUtil.getInstance().playOrPause();
+                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
                 break;
             case PREVIOUSMUSIC:
                 MusicUtil.getInstance().prePlayOrNextPlay();
+                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
                 break;
             case NEXTMUSIC:
                 MusicUtil.getInstance().prePlayOrNextPlay();
-
+                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
                 break;
         }
 
@@ -103,16 +128,49 @@ public class MusicService extends Service {
         }
     }
 
-
+    public void changNotifi(){
+        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-             return (IBinder) intent;
-//        return new MusicBind();
+             return new MusicBinder();
+
     }
 //    public class MusicBind extends Binder{
 //        public MusicService getService() {
 //            return MusicService.this;
 //        }
 //    }
+    public class MusicBroadCast extends BroadcastReceiver {
+    private final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
+    private final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
+    private final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.PRE";
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        switch (intent.getAction()){
+            case MUSIC_NOTIFICATION_ACTION_PLAY :
+                Intent startIntent1 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent1.putExtra("action",MusicService.PLAYORPAUSE);
+                startService(startIntent1);
+                sendBroadcast(intent1);
+                break;
+            case MUSIC_NOTIFICATION_ACTION_NEXT:
+                MusicUtil.getInstance().next();
+                Intent startIntent3 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent3.putExtra("action",MusicService.NEXTMUSIC);
+                startService(startIntent3);
+                sendBroadcast(intent1);
+                break;
+            case MUSIC_NOTIFICATION_ACTION_PRE:
+                MusicUtil.getInstance().pre();
+                Intent startIntent2 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent2.putExtra("action",MusicService.PREVIOUSMUSIC);
+                startService(startIntent2);
+                sendBroadcast(intent1);
+                break;
+        }
+
+    }
+}
 }

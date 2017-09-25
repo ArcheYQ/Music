@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.music">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -9,13 +10,13 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:hardwareAccelerated="false"
-         android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <service
             android:name=".service.MusicService"
             android:exported="false" />
@@ -28,7 +29,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MusicActivity" />
-        <activity android:name=".activity.MusicListActivity"></activity>
+        <activity android:name=".activity.MusicListActivity" />
+
+        <!--<receiver-->
+            <!--android:name=".M"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter >-->
+                <!--<action android:name="musicnotificaion.To.PLAY"/>-->
+                <!--<action android:name="musicnotificaion.To.NEXT"/>-->
+                <!--<action android:name="musicnotificaion.To.PRE"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
     </application>
 
 </manifest>

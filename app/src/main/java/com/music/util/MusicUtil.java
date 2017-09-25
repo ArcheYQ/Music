@@ -75,6 +75,7 @@ public class MusicUtil{
         }
         return musicUtils;
     }
+
     public List<Song> SearchSong(String name) {
         List<Song> list2 = new ArrayList<>();
         for (Song song : list) {
