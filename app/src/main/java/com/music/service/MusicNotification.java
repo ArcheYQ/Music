@@ -6,10 +6,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.music.R;
 import com.music.bean.Song;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by 雅倩宝宝 on 2017/9/24.
@@ -63,24 +66,21 @@ public class MusicNotification extends Notification {
         // 设置点击事件
 
         // 1.注册控制点击事件
-        play.putExtra("type",
-                MUSIC_NOTIFICATION_VALUE_PLAY);
+
         PendingIntent pplay = PendingIntent.getBroadcast(context, REQUEST_CODE,
                 play,0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__stopOrStart,
                 pplay);
 
         // 2.注册下一首点击事件
-        next.putExtra("type",
-                MUSIC_NOTIFICATION_VALUE_NEXT);
+
         PendingIntent pnext = PendingIntent.getBroadcast(context, REQUEST_CODE,
                 next, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__next,
                 pnext);
 
         // 3.注册关闭点击事件
-        close.putExtra("type",
-                MUSIC_NOTIFICATION_VALUE_PRE);
+
         PendingIntent pclose = PendingIntent.getBroadcast(context, REQUEST_CODE,
                 close, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__pre,
@@ -101,15 +101,17 @@ public class MusicNotification extends Notification {
         }
         musicNotifi.flags = Notification.FLAG_ONGOING_EVENT;
         manager.notify(0, musicNotifi);
+//        manager.cancel(0);
     }
 
     public void onUpdataMusicNotifi(Song song, boolean isplay) {
         // 设置添加内容
         remoteViews.setTextViewText(R.id.tv_notigication_songName,
                 (song.getSong()!=null?song.getSong():"什么东东") + "");
+        Log.i(TAG, "onUpdataMusicNotifi: ]"+song.getSong());
         remoteViews.setTextViewText(R.id.tv_notigication_singer,
                 (song.getSinger()!=null?song.getSinger():"未知") + "");
-
+        Log.i(TAG, "onUpdataMusicNotifi: ]"+song.getSong());
         //判断是否播放
         if (isplay) {
             remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,

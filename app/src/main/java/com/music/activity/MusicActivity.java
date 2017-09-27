@@ -97,6 +97,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         initData();
         vpMusciPlay.setOnPageChangeListener(this);
         MusicUtil.getInstance().getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            //因为没有附着在活动中所以就算活动finish掉，还是可以有监听~喵~
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 MusicUtil.getInstance().comNext();
@@ -117,6 +118,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             MusicUtil.getInstance().playMusic(song);
             isplay = true;
         }
+        MusicUtil.getInstance().setCurrentSongPosition(song.getPosition());
         if (isplay == true) {
             ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
         } else {
@@ -179,6 +181,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
     @Override
     protected void onDestroy() {
         unbindService(connection);
+        unregisterReceiver(msgReceiver);
         super.onDestroy();
     }
 
@@ -250,23 +253,27 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 musicService.changNotifi();
                 break;
             case R.id.iv_play:
-                Intent startIntent1 = new Intent(this, MusicService.class);
-                startIntent1.putExtra("action",MusicService.PLAYORPAUSE);
-                startService(startIntent1);
-                musicService.changNotifi();
                 if (isplay){
 
                     ivPlay.setImageResource(R.drawable.play_btn_play_selector);
                     isplay =false;
+
+
                 }else
                 {
                     isplay =true;
+
                     ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
                 }
+                Intent startIntent1 = new Intent(this, MusicService.class);
+                startIntent1.putExtra("action",MusicService.PLAYORPAUSE);
+                startService(startIntent1);
+
+
                 break;
             case R.id.iv_next:
                 MusicUtil.getInstance().next();
-                musicService.changNotifi();
+
                 changInfo();
                 if (!isplay){
                     isplay=true;
@@ -318,6 +325,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
          @Override
          public void onServiceConnected(ComponentName componentName, IBinder service1) {
          musicService = ((MusicService.MusicBinder ) service1).getService();
+             musicService.changNotifi();
          }
 
          @Override

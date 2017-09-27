@@ -86,8 +86,7 @@ public class NetFragment extends Fragment {
         mainGridview.setAdapter(musicGridAdapter);
         mainGridview.setOnItemClickListener(new mainGridviewListener());
         ButterKnife.bind(this, view);
-        initView();
-        srFragmentNet.setRefreshHeader(new ClassicsHeader(getContext()));
+
 //        hideAction = new TranslateAnimation(
 //                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 //                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -240.0f);
@@ -227,6 +226,8 @@ public class NetFragment extends Fragment {
                                 rvNetSong.setLayoutManager(new LinearLayoutManager(getContext()));
                                 rvNetSong.setItemAnimator(new DefaultItemAnimator());
                                 rvNetSong.setAdapter(findMusicAdapter);
+                                initView();
+                                srFragmentNet.setRefreshHeader(new ClassicsHeader(getContext()));
                             }
                         });
                         dissmiss();

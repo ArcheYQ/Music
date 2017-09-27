@@ -10,6 +10,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.music.util.MusicUtil;
@@ -76,8 +77,9 @@ public class MusicService extends Service {
         musicNotifi.setContext(getBaseContext());
         musicNotifi
                 .setManager((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-        musicNotifi.onCreateMusicNotifi();
+        Log.i("onCreate: ",MusicUtil.getInstance().getNewSongInfo().getSinger()+"");
         musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+        Log.i("onCreate: ",MusicUtil.getInstance().getNewSongInfo().getSinger()+"");
         musicBroadCast = new MusicBroadCast();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
@@ -94,7 +96,7 @@ public class MusicService extends Service {
         releseWakeLock();
         MusicUtil.getInstance().clean();
         unregisterReceiver(musicBroadCast);
-
+        musicNotifi.onCancelMusicNotifi();
     }
 
     @Override
@@ -129,11 +131,12 @@ public class MusicService extends Service {
     }
 
     public void changNotifi(){
-        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+
     }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
              return new MusicBinder();
 
     }

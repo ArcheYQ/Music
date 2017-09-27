@@ -179,12 +179,17 @@ public class MusicUtil{
 
     }
     public int getDuration(){
+        if (mediaPlayer == null) {
+            return 0;
+        }
         return mediaPlayer.getDuration();
     }
     public int getCurrentPosition(){
         return mediaPlayer.getCurrentPosition();
     }
-
+    public void setCurrentSongPosition(int p){
+        this.currentSongPosition = p;
+    }
 
     public void setSeekTo (int i){
         mediaPlayer.seekTo(i);
