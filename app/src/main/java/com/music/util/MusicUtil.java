@@ -137,9 +137,11 @@ public class MusicUtil{
     }
 
     public boolean isPlaying(){
+
         if (mediaPlayer == null) {
             return false;
         }
+        Log.i(TAG, "Music"+mediaPlayer.isPlaying());
         if (mediaPlayer.isPlaying()){
             return true;
         }else

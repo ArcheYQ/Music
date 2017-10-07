@@ -295,6 +295,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
          tvTitle.setText(newSong.getSong());
          tvSinger.setText(newSong.getSinger());
          isplay = MusicUtil.getInstance().isPlaying();
+         Log.i("afd", "ACMusic"+isplay);
          if (isplay == true) {
              ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
          } else {

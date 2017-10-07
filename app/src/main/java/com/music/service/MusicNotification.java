@@ -108,11 +108,12 @@ public class MusicNotification extends Notification {
         // 设置添加内容
         remoteViews.setTextViewText(R.id.tv_notigication_songName,
                 (song.getSong()!=null?song.getSong():"什么东东") + "");
-        Log.i(TAG, "onUpdataMusicNotifi: ]"+song.getSong());
+
         remoteViews.setTextViewText(R.id.tv_notigication_singer,
                 (song.getSinger()!=null?song.getSinger():"未知") + "");
-        Log.i(TAG, "onUpdataMusicNotifi: ]"+song.getSong());
+
         //判断是否播放
+        Log.i(TAG, "onUpdataMusicNotifi: ]"+isplay);
         if (isplay) {
             remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,
                     R.drawable.star);
