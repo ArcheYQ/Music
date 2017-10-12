@@ -26,6 +26,12 @@ import com.music.R;
 import com.music.activity.fragment.LrcFragment;
 import com.music.adapter.FragmentAdapter;
 import com.music.bean.Song;
+import com.music.lrc.DefaultLrcBulider;
+import com.music.lrc.ILrcBulider;
+import com.music.lrc.ILrcView;
+import com.music.lrc.ILrcViewListener;
+import com.music.lrc.LrcRow;
+import com.music.lrc.LrcUtil;
 import com.music.service.MusicService;
 import com.music.util.MusicUtil;
 import com.music.widget.IndicatorLayout;
@@ -78,6 +84,12 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
     private Timer timer ;
     private TimerTask timerTask;
     private MsgReceiver msgReceiver;
+    //更新歌词的定时器
+    private Timer mLrcTimer;
+    //自定义LrcView，用来展示歌词
+    ILrcView mLrcView;
+    //更新歌词的定时任务
+    private TimerTask mLrcTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +107,10 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             }
         });
         initData();
+        String lrc = LrcUtil.getInstance().getLrcFromAssets(song.getSong(),getBaseContext());
+        ILrcBulider bulider = new DefaultLrcBulider();
+        List<LrcRow> rows = bulider.getLrcRows(lrc);
+        mLrcView.setLrc(rows);
         vpMusciPlay.setOnPageChangeListener(this);
         MusicUtil.getInstance().getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             //因为没有附着在活动中所以就算活动finish掉，还是可以有监听~喵~
@@ -105,6 +121,24 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 Intent startIntent4 = new Intent(MusicActivity.this, MusicService.class);
                 startIntent4.putExtra("action", MusicService.COMPLETE);
                 startService(startIntent4);
+            }
+        });
+        MusicUtil.getInstance().getMediaPlayer().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+            if (mLrcTimer == null ){
+                mLrcTimer = new Timer();
+                mLrcTask = new LrcTask();
+                mLrcTimer.scheduleAtFixedRate(mLrcTask, 0, 1000);
+            }
+            }
+        });
+        mLrcView.setListener(new ILrcViewListener() {
+            @Override
+            public void onLrcSeeked(int newPosition, LrcRow row) {
+                if (MusicUtil.getInstance().getMediaPlayer()!= null){
+                    MusicUtil.getInstance().getMediaPlayer().seekTo((int) row.time);
+                }
             }
         });
 
@@ -283,6 +317,19 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 startIntent3.putExtra("action",MusicService.NEXTMUSIC);
                 startService(startIntent3);
                 break;
+        }
+    }
+    class LrcTask extends TimerTask{
+
+        @Override
+        public void run() {
+            final long timePassed = MusicUtil.getInstance().getCurrentPosition();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLrcView.seekLrcToTime(timePassed);
+                }
+            });
         }
     }
      public void changInfo(){
