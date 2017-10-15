@@ -23,6 +23,12 @@ public class HttpUtil {
         client.newCall(request).enqueue(callback);
     }
 
-
+    public static void requstLrcData(final String name,okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://gecimi.com/api/lyric/"+name)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
 }
 

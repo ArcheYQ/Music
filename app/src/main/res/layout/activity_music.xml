@@ -54,19 +54,37 @@
             </LinearLayout>
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_musci_play"
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:lrc="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:overScrollMode="never">
-        </android.support.v4.view.ViewPager>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_musci_play"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="never">
+            </android.support.v4.view.ViewPager>
+
+            <com.music.lrc.LrcView
+                android:id="@+id/lrc_mLrcView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                />
+            <include layout="@layout/include_play_page_controller"/>
+        </LinearLayout>
         <com.music.widget.IndicatorLayout
             android:id="@+id/il_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp" />
-        <include layout="@layout/include_play_page_controller"/>
+
     </LinearLayout>
 </LinearLayout>

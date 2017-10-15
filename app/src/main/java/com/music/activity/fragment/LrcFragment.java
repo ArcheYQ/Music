@@ -20,7 +20,6 @@ import com.music.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.wcy.lrcview.LrcView;
 
 /**
  * Created by 雅倩宝宝 on 2017/9/11.
@@ -29,8 +28,7 @@ import me.wcy.lrcview.LrcView;
 public class LrcFragment extends Fragment {
     @Bind(R.id.sb_volume)
     SeekBar sbVolume;
-    @Bind(R.id.lrc_view_full)
-    LrcView lrcViewFull;
+
     private AudioManager mAudioManager;
     private ContentObserver mVoiceObserver;
     private MyVolumeReceiver mVolumeReceiver;

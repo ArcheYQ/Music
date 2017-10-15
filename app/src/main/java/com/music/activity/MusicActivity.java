@@ -28,14 +28,17 @@ import com.music.adapter.FragmentAdapter;
 import com.music.bean.Song;
 import com.music.lrc.DefaultLrcBulider;
 import com.music.lrc.ILrcBulider;
-import com.music.lrc.ILrcView;
 import com.music.lrc.ILrcViewListener;
+import com.music.lrc.LrcJsonUtil;
 import com.music.lrc.LrcRow;
 import com.music.lrc.LrcUtil;
+import com.music.lrc.LrcView;
 import com.music.service.MusicService;
+import com.music.util.HttpUtil;
 import com.music.util.MusicUtil;
 import com.music.widget.IndicatorLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,11 +48,14 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import qiu.niorgai.StatusBarCompat;
 
 import static com.music.util.MusicUtil.TYPE_SINGLE;
 
-public class MusicActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener ,ViewTreeObserver.OnScrollChangedListener{
+public class MusicActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener {
 
     @Bind(R.id.iv_back)
     ImageView ivBack;
@@ -75,21 +81,24 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
     ImageView ivPlay;
     @Bind(R.id.iv_next)
     ImageView ivNext;
+    @Bind(R.id.lrc_mLrcView)
+    LrcView mLrcView;
+
+
     private MusicService musicService;
     private boolean isSeekBarChanging;//互斥变量，防止进度条与定时器冲突。
-    FragmentAdapter adapter ;
+    FragmentAdapter adapter;
     Song song;
     private static boolean isplay = true;
-    private int mode = MusicUtil.TYPE_ORDER ;
-    private Timer timer ;
+    private int mode = MusicUtil.TYPE_ORDER;
+    private Timer timer;
     private TimerTask timerTask;
     private MsgReceiver msgReceiver;
     //更新歌词的定时器
     private Timer mLrcTimer;
-    //自定义LrcView，用来展示歌词
-    ILrcView mLrcView;
     //更新歌词的定时任务
     private TimerTask mLrcTask;
+    String lrc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,10 +116,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             }
         });
         initData();
-        String lrc = LrcUtil.getInstance().getLrcFromAssets(song.getSong(),getBaseContext());
-        ILrcBulider bulider = new DefaultLrcBulider();
-        List<LrcRow> rows = bulider.getLrcRows(lrc);
-        mLrcView.setLrc(rows);
+        initLRC();
         vpMusciPlay.setOnPageChangeListener(this);
         MusicUtil.getInstance().getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             //因为没有附着在活动中所以就算活动finish掉，还是可以有监听~喵~
@@ -126,32 +132,59 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         MusicUtil.getInstance().getMediaPlayer().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-            if (mLrcTimer == null ){
-                mLrcTimer = new Timer();
-                mLrcTask = new LrcTask();
-                mLrcTimer.scheduleAtFixedRate(mLrcTask, 0, 1000);
-            }
+                if (mLrcTimer == null) {
+                    mLrcTimer = new Timer();
+                    mLrcTask = new LrcTask();
+                    mLrcTimer.scheduleAtFixedRate(mLrcTask, 0, 1000);
+                }
             }
         });
         mLrcView.setListener(new ILrcViewListener() {
             @Override
             public void onLrcSeeked(int newPosition, LrcRow row) {
-                if (MusicUtil.getInstance().getMediaPlayer()!= null){
+                if (MusicUtil.getInstance().getMediaPlayer() != null) {
                     MusicUtil.getInstance().getMediaPlayer().seekTo((int) row.time);
                 }
             }
         });
 
     }
+    public void initLRC() {
+
+        HttpUtil.requstLrcData(song.getSong(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lrc = "";
+                Log.i("fali","fali"+lrc);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response));
+                Log.i("Response","Response"+lrc);
+            }
+        });
+        ILrcBulider bulider = new DefaultLrcBulider();
+        List<LrcRow> rows = bulider.getLrcRows(lrc);
+        mLrcView.setLrc(rows);
+    }
 
     public void initData() {
-        isplay = MusicUtil.getInstance().isPlaying();
+
+
         song = (Song) getIntent().getSerializableExtra("songInfo");
 
         if (song.getPosition() != MusicUtil.getInstance().getCurrentSongPosition()) {
-            MusicUtil.getInstance().playMusic(song);
+            MusicUtil.getInstance().setCurrentSongPosition(song.getPosition());
+            Intent startIntent6 = new Intent(this, MusicService.class);
+            startIntent6.putExtra("action", MusicService.START);
+            startService(startIntent6);
             isplay = true;
+        }else
+        {
+            isplay = MusicUtil.getInstance().isPlaying();
         }
+
         MusicUtil.getInstance().setCurrentSongPosition(song.getPosition());
         if (isplay == true) {
             ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
@@ -165,10 +198,9 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(isSeekBarChanging==true) {
+                if (isSeekBarChanging == true) {
                     return;
                 }
-
 
 
                 sbProgress.setProgress(MusicUtil.getInstance().getCurrentPosition());
@@ -176,7 +208,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvCurrentTime.setText(formatTime("mm:ss",MusicUtil.getInstance().getCurrentPosition()));
+                        tvCurrentTime.setText(formatTime("mm:ss", MusicUtil.getInstance().getCurrentPosition()));
                     }
                 });
             }
@@ -185,7 +217,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         timer.schedule(timerTask, 0, 1000);
         tvTitle.setText(song.getSong());
         tvSinger.setText(song.getSinger());
-        tvTotalTime.setText(formatTime("mm:ss",song.getDuration()));
+        tvTotalTime.setText(formatTime("mm:ss", song.getDuration()));
         ilIndicator.create(vpMusciPlay.getCurrentItem());
         Intent startIntent = new Intent(this, MusicService.class);
         bindService(startIntent, connection, BIND_AUTO_CREATE);
@@ -196,7 +228,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         } else {
             ivMode.setImageResource(R.drawable.play_btn_shuffle_selector);
         }
-        sbProgress.setOnSeekBarChangeListener( new MySeekbar());
+        sbProgress.setOnSeekBarChangeListener(new MySeekbar());
         //动态注册广播接收器
         msgReceiver = new MsgReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -214,6 +246,23 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 
     @Override
     protected void onDestroy() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (mLrcTimer != null) {
+            mLrcTimer.cancel();
+            mLrcTimer = null;
+        }
+        if (mLrcTask != null) {
+            mLrcTask.cancel();
+            mLrcTask = null;
+        }
+
         unbindService(connection);
         unregisterReceiver(msgReceiver);
         super.onDestroy();
@@ -241,8 +290,6 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 
     @Override
     protected void onResume() {
-        isplay = MusicUtil.getInstance().isPlaying();
-        changInfo();
         super.onResume();
     }
 
@@ -252,55 +299,54 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             case R.id.iv_back:
                 break;
             case R.id.iv_mode:
-                if (mode == MusicUtil.TYPE_ORDER){
+                if (mode == MusicUtil.TYPE_ORDER) {
                     Toast.makeText(this, "咦，已经切换为随机模式n(*≧▽≦*)n", Toast.LENGTH_SHORT).show();
                     mode = MusicUtil.TYPE_RANDOM;
                     ivMode.setImageResource(R.drawable.play_btn_shuffle_selector);
                     MusicUtil.getInstance().setPatten(MusicUtil.TYPE_RANDOM);
-                }else if(mode == MusicUtil.TYPE_RANDOM){
-                    Log.i("pat2",""+mode);
+                } else if (mode == MusicUtil.TYPE_RANDOM) {
+                    Log.i("pat2", "" + mode);
                     Toast.makeText(this, "已经准备好单曲循环O(∩_∩)O", Toast.LENGTH_SHORT).show();
                     this.mode = TYPE_SINGLE;
                     ivMode.setImageResource(R.drawable.play_btn_one_selector);
                     MusicUtil.getInstance().setPatten(TYPE_SINGLE);
-                    Log.i("pat4",""+mode);
+                    Log.i("pat4", "" + mode);
 
-                }else if (mode == TYPE_SINGLE){
-                    Log.i("pat5",""+mode);
+                } else if (mode == TYPE_SINGLE) {
+                    Log.i("pat5", "" + mode);
                     Toast.makeText(this, "那就按顺序播放吧n(*≧▽≦*)n", Toast.LENGTH_SHORT).show();
                     this.mode = MusicUtil.TYPE_ORDER;
                     ivMode.setImageResource(R.drawable.play_btn_loop_selector);
                     MusicUtil.getInstance().setPatten(MusicUtil.TYPE_ORDER);
-                    Log.i("pat6",""+mode);
+                    Log.i("pat6", "" + mode);
                 }
                 break;
             case R.id.iv_prev:
-                if (!isplay){
-                    isplay=true;
+                if (!isplay) {
+                    isplay = true;
                     ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
                 }
                 MusicUtil.getInstance().pre();
                 changInfo();
                 Intent startIntent2 = new Intent(this, MusicService.class);
-                startIntent2.putExtra("action",MusicService.PREVIOUSMUSIC);
+                startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
                 musicService.changNotifi();
                 break;
             case R.id.iv_play:
-                if (isplay){
+                if (isplay) {
 
                     ivPlay.setImageResource(R.drawable.play_btn_play_selector);
-                    isplay =false;
+                    isplay = false;
 
 
-                }else
-                {
-                    isplay =true;
+                } else {
+                    isplay = true;
 
                     ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
                 }
                 Intent startIntent1 = new Intent(this, MusicService.class);
-                startIntent1.putExtra("action",MusicService.PLAYORPAUSE);
+                startIntent1.putExtra("action", MusicService.PLAYORPAUSE);
                 startService(startIntent1);
 
 
@@ -309,17 +355,18 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 MusicUtil.getInstance().next();
 
                 changInfo();
-                if (!isplay){
-                    isplay=true;
+                if (!isplay) {
+                    isplay = true;
                     ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
                 }
                 Intent startIntent3 = new Intent(this, MusicService.class);
-                startIntent3.putExtra("action",MusicService.NEXTMUSIC);
+                startIntent3.putExtra("action", MusicService.NEXTMUSIC);
                 startService(startIntent3);
                 break;
         }
     }
-    class LrcTask extends TimerTask{
+
+    class LrcTask extends TimerTask {
 
         @Override
         public void run() {
@@ -332,22 +379,23 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             });
         }
     }
-     public void changInfo(){
-         Song newSong = MusicUtil.getInstance().getNewSongInfo();
-         if(newSong ==null)
-             return;
-         Log.i("song2",""+newSong.getSinger());
-         sbProgress.setMax((int) newSong.getDuration());
-         tvTotalTime.setText(formatTime("mm:ss",newSong.getDuration()));
-         tvTitle.setText(newSong.getSong());
-         tvSinger.setText(newSong.getSinger());
-         isplay = MusicUtil.getInstance().isPlaying();
-         Log.i("afd", "ACMusic"+isplay);
-         if (isplay == true) {
-             ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
-         } else {
-             ivPlay.setImageResource(R.drawable.play_btn_play_selector);
-         }
+
+    public void changInfo() {
+        Song newSong = MusicUtil.getInstance().getNewSongInfo();
+        if (newSong == null)
+            return;
+        Log.i("song2", "" + newSong.getSinger());
+        sbProgress.setMax((int) newSong.getDuration());
+        tvTotalTime.setText(formatTime("mm:ss", newSong.getDuration()));
+        tvTitle.setText(newSong.getSong());
+        tvSinger.setText(newSong.getSinger());
+        isplay = MusicUtil.getInstance().isPlaying();
+        Log.i("afd", "ACMusic" + isplay);
+        if (isplay == true) {
+            ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
+        } else {
+            ivPlay.setImageResource(R.drawable.play_btn_play_selector);
+        }
 //         timerTask = new TimerTask() {
 //             @Override
 //             public void run() {
@@ -368,34 +416,37 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 //         timer = new Timer();
 //
 //         timer.schedule(timerTask, 0, 500);
-     }
-     private ServiceConnection connection = new ServiceConnection() {
-         @Override
-         public void onServiceConnected(ComponentName componentName, IBinder service1) {
-         musicService = ((MusicService.MusicBinder ) service1).getService();
-             musicService.changNotifi();
-         }
+    }
 
-         @Override
-         public void onServiceDisconnected(ComponentName componentName) {
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service1) {
+            musicService = ((MusicService.MusicBinder) service1).getService();
+            musicService.changNotifi();
+        }
 
-         }
-     };
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
     class MySeekbar implements SeekBar.OnSeekBarChangeListener {
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
         }
 
         public void onStartTrackingTouch(SeekBar seekBar) {
-            isSeekBarChanging=true;
+            isSeekBarChanging = true;
         }
 
         public void onStopTrackingTouch(SeekBar seekBar) {
             MusicUtil.getInstance().setSeekTo(seekBar.getProgress());
-            isSeekBarChanging=false;
+            isSeekBarChanging = false;
         }
 
     }
+
     public static String formatTime(String pattern, long milli) {
         int m = (int) (milli / DateUtils.MINUTE_IN_MILLIS);
         int s = (int) ((milli / DateUtils.SECOND_IN_MILLIS) % 60);

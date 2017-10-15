@@ -10,7 +10,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.music.util.MusicUtil;
@@ -29,7 +28,7 @@ public class MusicService extends Service {
      * 播放音乐
      */
     public static final String COMPLETE = "4kf";
-
+    public static final String START = "4k1f";
     /**
      * 暂停或者是播放音乐
      */
@@ -77,9 +76,8 @@ public class MusicService extends Service {
         musicNotifi.setContext(getBaseContext());
         musicNotifi
                 .setManager((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-        Log.i("onCreate: ",MusicUtil.getInstance().getNewSongInfo().getSinger()+"");
-        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-        Log.i("onCreate: ",MusicUtil.getInstance().getNewSongInfo().getSinger()+"");
+
+
         musicBroadCast = new MusicBroadCast();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
@@ -103,6 +101,10 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         acquireWakeLock();
         switch (intent.getStringExtra("action")) {
+            case START:
+                MusicUtil.getInstance().prePlayOrNextPlay();
+                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                break;
             case COMPLETE:
                 MusicUtil.getInstance().prePlayOrNextPlay();
                 musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());

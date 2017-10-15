@@ -187,6 +187,9 @@ public class MusicUtil{
         return mediaPlayer.getDuration();
     }
     public int getCurrentPosition(){
+        if (mediaPlayer == null) {
+            return 0;
+        }
         return mediaPlayer.getCurrentPosition();
     }
     public void setCurrentSongPosition(int p){
@@ -212,12 +215,13 @@ public class MusicUtil{
         Log.i("song1",""+list.get(currentSongPosition).getSinger());
     }
     public void prePlayOrNextPlay(){
-        playMusic(list.get(currentSongPosition));
+        if (list!=null){
+        playMusic(list.get(currentSongPosition));}
     }
     public Song getNewSongInfo(){
-        if(list.get(currentSongPosition)==null)
-            Log.d(TAG, "getNewSongInfo: "+"孔");
-        return list.get(currentSongPosition);
+        if(list!=null)
+            return list.get(currentSongPosition);
+        return null;
     }
     public Song getPreSongInfo(){
         if(list.get(currentSongPosition)==null)
@@ -262,7 +266,12 @@ public class MusicUtil{
 //        });
 //    }
     public MediaPlayer getMediaPlayer(){
-        return mediaPlayer;
+        if(mediaPlayer == null)
+            mediaPlayer = new MediaPlayer();
+            return mediaPlayer;
+
     }
+
+
 }
 

@@ -9,9 +9,6 @@ import java.io.Serializable;
 public class Song implements Serializable {
 
 
-    /**
-     * 歌手
-     */
     private String singer;
     /**
      * 歌曲名称

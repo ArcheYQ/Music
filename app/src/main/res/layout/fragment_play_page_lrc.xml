@@ -9,14 +9,5 @@
 
     <include layout="@layout/include_play_page_volume_bar" />
 
-    <me.wcy.lrcview.LrcView
-        android:id="@+id/lrc_view_full"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        lrc:lrcAnimationDuration="1000"
-        lrc:lrcCurrentTextColor="@color/white"
-        lrc:lrcDividerHeight="24dp"
-        lrc:lrcNormalTextColor="@color/white_50p"
-        lrc:lrcTextSize="16sp" />
+
 </LinearLayout>
