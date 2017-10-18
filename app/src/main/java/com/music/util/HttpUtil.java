@@ -1,7 +1,11 @@
 package com.music.util;
 
+import android.util.Log;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by 雅倩宝宝 on 2017/9/20.
@@ -25,8 +29,11 @@ public class HttpUtil {
 
     public static void requstLrcData(final String name,okhttp3.Callback callback){
         OkHttpClient client = new OkHttpClient();
+        Log.i(TAG, "requstLrcData: "+name);
+        String name1 = name.trim();
+        Log.i(TAG, "requstLrcData:"+name1);
         Request request = new Request.Builder()
-                .url("http://gecimi.com/api/lyric/"+name)
+                .url("http://gecimi.com/api/lyric/"+name1)
                 .build();
         client.newCall(request).enqueue(callback);
     }

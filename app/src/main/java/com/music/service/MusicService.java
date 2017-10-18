@@ -100,27 +100,30 @@ public class MusicService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         acquireWakeLock();
-        switch (intent.getStringExtra("action")) {
-            case START:
-                MusicUtil.getInstance().prePlayOrNextPlay();
-                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-                break;
-            case COMPLETE:
-                MusicUtil.getInstance().prePlayOrNextPlay();
-                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-                break;
-            case PLAYORPAUSE:
-                MusicUtil.getInstance().playOrPause();
-                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-                break;
-            case PREVIOUSMUSIC:
-                MusicUtil.getInstance().prePlayOrNextPlay();
-                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-                break;
-            case NEXTMUSIC:
-                MusicUtil.getInstance().prePlayOrNextPlay();
-                musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-                break;
+        if (intent.getStringExtra("action")!=null){
+            switch (intent.getStringExtra("action")) {
+                case START:
+                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+                case COMPLETE:
+                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+                case PLAYORPAUSE:
+                    MusicUtil.getInstance().playOrPause();
+                    musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+                case PREVIOUSMUSIC:
+                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+                case NEXTMUSIC:
+                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+        }
+
         }
 
 

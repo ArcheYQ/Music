@@ -17,10 +17,10 @@ public class DefaultLrcBulider implements ILrcBulider {
     static final String TAG = "DefaultLrcBulider";
 
     @Override
-    public List<LrcRow> getLrcRows(String rawLrc) {
-        Log.d(TAG,"getLrcRows by rawString");
+    public List<LrcRow> getLrcRows(final String rawLrc) {
+        Log.i(TAG,"getLrcRows by rawString"+rawLrc+"");
         if (rawLrc == null || rawLrc.length() == 0){
-            Log.e(TAG,"getLrcRows rawLrc null or empty");
+            Log.i(TAG,"getLrcRows rawLrc null or empty");
             return null;
         }
         StringReader reader = new StringReader(rawLrc);
@@ -31,7 +31,7 @@ public class DefaultLrcBulider implements ILrcBulider {
             //循环地读取歌词的每一行
             do{
                 line = bufferedReader.readLine();
-                Log.d(TAG,"lrc raw line: " + line);
+                Log.i(TAG,"lrc raw line: " + line);
                 if(line != null && line.length() > 0){
                     //解析每一行歌词 得到每行歌词的集合，因为有些歌词重复有多个时间，就可以解析出多个歌词行来
                     List<LrcRow> lrcRows = LrcRow.createRows(line);
@@ -48,7 +48,7 @@ public class DefaultLrcBulider implements ILrcBulider {
                 Collections.sort(rows);
                 if(rows!=null&&rows.size()>0){
                     for(LrcRow lrcRow:rows){
-                        Log.d(TAG, "lrcRow:" + lrcRow.toString());
+                        Log.i(TAG, "lrcRow:" + lrcRow.toString());
                     }
                 }
             }

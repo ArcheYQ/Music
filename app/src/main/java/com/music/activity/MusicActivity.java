@@ -129,16 +129,16 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 startService(startIntent4);
             }
         });
-        MusicUtil.getInstance().getMediaPlayer().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                if (mLrcTimer == null) {
-                    mLrcTimer = new Timer();
-                    mLrcTask = new LrcTask();
-                    mLrcTimer.scheduleAtFixedRate(mLrcTask, 0, 1000);
-                }
-            }
-        });
+//        MusicUtil.getInstance().getMediaPlayer().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mediaPlayer) {
+//                if (mLrcTimer == null) {
+//                    mLrcTimer = new Timer();
+//                    mLrcTask = new LrcTask();
+//                    mLrcTimer.scheduleAtFixedRate(mLrcTask, 0, 1000);
+//                }
+//            }
+//        });
         mLrcView.setListener(new ILrcViewListener() {
             @Override
             public void onLrcSeeked(int newPosition, LrcRow row) {
@@ -156,17 +156,34 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             public void onFailure(Call call, IOException e) {
                 lrc = "";
                 Log.i("fali","fali"+lrc);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("fali","fali"+lrc+"2");
+                        ILrcBulider bulider = new DefaultLrcBulider();
+                        List<LrcRow> rows = bulider.getLrcRows(lrc);
+                        Log.i("fali","fali"+rows+"3");
+                        mLrcView.setLrc(rows);
+                    }
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response));
-                Log.i("Response","Response"+lrc);
+                Log.i("Response","Response1"+lrc+"1");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("Response","Response1"+lrc+"2");
+                        ILrcBulider bulider = new DefaultLrcBulider();
+                        List<LrcRow> rows = bulider.getLrcRows(lrc);
+                        mLrcView.setLrc(rows);
+                    }
+                });
             }
         });
-        ILrcBulider bulider = new DefaultLrcBulider();
-        List<LrcRow> rows = bulider.getLrcRows(lrc);
-        mLrcView.setLrc(rows);
+
     }
 
     public void initData() {
@@ -194,7 +211,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         if (mode != MusicUtil.getInstance().getPattern()) {
             mode = MusicUtil.getInstance().getPattern();
         }
-        sbProgress.setMax(MusicUtil.getInstance().getDuration());
+        sbProgress.setMax((int) song.getDuration());
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -203,11 +220,14 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 }
 
 
-                sbProgress.setProgress(MusicUtil.getInstance().getCurrentPosition());
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        final long timePassed = MusicUtil.getInstance().getCurrentPosition();
+                        sbProgress.setProgress((int) timePassed);
+                        mLrcView.seekLrcToTime(timePassed);
                         tvCurrentTime.setText(formatTime("mm:ss", MusicUtil.getInstance().getCurrentPosition()));
                     }
                 });
@@ -246,23 +266,14 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 
     @Override
     protected void onDestroy() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-        if (timerTask != null) {
-            timerTask.cancel();
-            timerTask = null;
-        }
-        if (mLrcTimer != null) {
-            mLrcTimer.cancel();
-            mLrcTimer = null;
-        }
-        if (mLrcTask != null) {
-            mLrcTask.cancel();
-            mLrcTask = null;
-        }
-
+//        if (timer != null) {
+//            timer.cancel();
+//            timer = null;
+//        }
+//        if (timerTask != null) {
+//            timerTask.cancel();
+//            timerTask = null;
+//        }
         unbindService(connection);
         unregisterReceiver(msgReceiver);
         super.onDestroy();
@@ -366,19 +377,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         }
     }
 
-    class LrcTask extends TimerTask {
 
-        @Override
-        public void run() {
-            final long timePassed = MusicUtil.getInstance().getCurrentPosition();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLrcView.seekLrcToTime(timePassed);
-                }
-            });
-        }
-    }
 
     public void changInfo() {
         Song newSong = MusicUtil.getInstance().getNewSongInfo();

@@ -17,8 +17,8 @@ public class LrcJsonUtil {
             String ResponsData = response.body().string();
             JSONObject jsonObject = new JSONObject(ResponsData);
             String count = jsonObject.getString("count");
-            int c = Integer.parseInt(count);
-            if (c>0){
+            Log.i("TAG", "parseJOSNWithGSONCOUNT:"+count);
+            if (!count.equals("0")){
                 String result = jsonObject.getString("result");
                 JSONArray jsonArray = new JSONArray(result);
                 JSONObject jsonObject1 = jsonArray.getJSONObject(0);
@@ -26,6 +26,7 @@ public class LrcJsonUtil {
                 Log.i("TAG", "parseJOSNWithGSON: "+url);
                 return url;
             }else {
+                Log.i("TAG", "parseJOSNWithGSON: "+1);
                 return "";
             }
         }catch (Exception e){

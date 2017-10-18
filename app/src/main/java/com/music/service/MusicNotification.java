@@ -106,21 +106,28 @@ public class MusicNotification extends Notification {
 
     public void onUpdataMusicNotifi(Song song, boolean isplay) {
         // 设置添加内容
-        remoteViews.setTextViewText(R.id.tv_notigication_songName,
-                (song.getSong()!=null?song.getSong():"什么东东") + "");
-
-        remoteViews.setTextViewText(R.id.tv_notigication_singer,
-                (song.getSinger()!=null?song.getSinger():"未知") + "");
-
-        //判断是否播放
-        Log.i(TAG, "onUpdataMusicNotifi: ]"+isplay);
-        if (isplay) {
-            remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,
-                    R.drawable.star);
-        } else {
-            remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,
-                    R.drawable.stop);
+        if (song==null){
+            remoteViews.setTextViewText(R.id.tv_notigication_songName,"什么东东");
+            remoteViews.setTextViewText(R.id.tv_notigication_singer,"未知");
         }
+        else {
+            remoteViews.setTextViewText(R.id.tv_notigication_songName,
+                    (song.getSong()!=null?song.getSong():"什么东东") + "");
+
+            remoteViews.setTextViewText(R.id.tv_notigication_singer,
+                    (song.getSinger()!=null?song.getSinger():"未知") + "");
+
+            //判断是否播放
+            Log.i(TAG, "onUpdataMusicNotifi: ]"+isplay);
+            if (isplay) {
+                remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,
+                        R.drawable.star);
+            } else {
+                remoteViews.setImageViewResource(R.id.iv_notigication__stopOrStart,
+                        R.drawable.stop);
+            }
+        }
+
         onCreateMusicNotifi();
     }
 

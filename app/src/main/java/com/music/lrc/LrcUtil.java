@@ -22,12 +22,15 @@ public class LrcUtil {
 //        return lrcUtil;
 //    }
     public static String getLrcFromAssets(String Url){
+        Log.i("first","getLrcFromAssets: "+Url);
         if (Url.equals("")){
             return "";
         }
         try {
             URL url=new URL(Url);
             HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+            conn.setDoInput(true);
+            conn.setRequestMethod("GET");
             InputStream input=conn.getInputStream();
             BufferedReader in=new BufferedReader(new InputStreamReader(input));
             String line = "" ;

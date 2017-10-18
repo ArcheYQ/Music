@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class LrcView extends android.view.View implements ILrcView {
     /**
      * 歌词集合，包含所有行的歌词
      */
-    private List<LrcRow> mLrcRows;
+    private static List<LrcRow> mLrcRows;
     /**
      * 当前高亮歌词的字体颜色为黄色
      */
@@ -163,19 +164,23 @@ public class LrcView extends android.view.View implements ILrcView {
      */
     @Override
     public void seekLrcToTime(long time) {
+        Log.i("TAG", "run: 12"+time);
     if (mLrcRows == null || mLrcRows.size() == 0){
         return;
     }
     if (mDisplayMode != DISPLAY_MODE_NORMAL){
         return;
     }
-    for (int i = 0;i<mLrcRows.size();i++){
+    for (int i = 0;i<mLrcRows.size(); i++){
         LrcRow current = mLrcRows.get(i);
+
         LrcRow next = i + 1 ==mLrcRows.size() ? null : mLrcRows.get(i + 1);
         /**
          *  正在播放的时间大于current行的歌词的时间而小于next行歌词的时间， 设置要高亮的行为current行
          *  正在播放的时间大于current行的歌词，而current行为最后一句歌词时，设置要高亮的行为current行
          */
+        Log.i("TAG", "run1: "+current.time+i);
+        Log.i("TAG", "run1size: "+mLrcRows.size());
         if ((time >= current.time && next != null && time < next.time)
                 || (time > current.time && next == null)){
             seekLrc(i,false);
