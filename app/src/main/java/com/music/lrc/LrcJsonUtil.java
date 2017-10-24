@@ -12,16 +12,16 @@ import okhttp3.Response;
  */
 
 public class LrcJsonUtil {
-    public static String parseJOSNWithGSON(Response response){
+    public static String parseJOSNWithGSON(Response response ,int c){
         try{
             String ResponsData = response.body().string();
             JSONObject jsonObject = new JSONObject(ResponsData);
-            String count = jsonObject.getString("count");
+            int count = Integer.parseInt(jsonObject.getString("count"));
             Log.i("TAG", "parseJOSNWithGSONCOUNT:"+count);
-            if (!count.equals("0")){
+            if (count>=c){
                 String result = jsonObject.getString("result");
                 JSONArray jsonArray = new JSONArray(result);
-                JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+                JSONObject jsonObject1 = jsonArray.getJSONObject(c-1);
                 String url = jsonObject1.getString("lrc");
                 Log.i("TAG", "parseJOSNWithGSON: "+url);
                 return url;

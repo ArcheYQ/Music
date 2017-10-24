@@ -173,7 +173,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response));
+                lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response,2));
                 Log.i("Response","Response1"+lrc+"1");
                 runOnUiThread(new Runnable() {
                     @Override
