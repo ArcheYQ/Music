@@ -8,7 +8,15 @@ import java.io.Serializable;
 
 public class Song implements Serializable {
 
+    public String getALLName() {
+        return ALLName;
+    }
 
+    public void setALLName(String ALLName) {
+        this.ALLName = ALLName;
+    }
+
+    private String ALLName;
     private String singer;
     /**
      * 歌曲名称
