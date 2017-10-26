@@ -1,7 +1,11 @@
 package com.music.activity.fragment;
 
 import android.Manifest;
+import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +29,7 @@ import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -37,7 +42,7 @@ import butterknife.ButterKnife;
 public class LocalFragment extends Fragment {
     @Bind(R.id.rv_fragment_local)
     RecyclerView rvFragmentLocal;
-    MusicAdapter musicAdapter;
+    static MusicAdapter musicAdapter;
     ArrayList<Song> song;
     @Bind(R.id.et_findlocal)
     EditText etFindlocal;
@@ -103,6 +108,15 @@ public class LocalFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-
+    public static boolean deleteSong (Song song) {
+        File file = new File(song.getPath());
+        if (file.isFile() && file.exists()) {
+            file.delete();
+            MusicUtil.getInstance().changeList(song);
+            musicAdapter.setList(MusicUtil.getInstance().getList());
+            return true;
+        }
+          return false;
+    }
 
 }

@@ -23,10 +23,10 @@ public class LrcJsonUtil {
                 JSONArray jsonArray = new JSONArray(result);
                 JSONObject jsonObject1 = jsonArray.getJSONObject(c-1);
                 String url = jsonObject1.getString("lrc");
-                Log.i("TAG", "parseJOSNWithGSON: "+url);
+                Log.i("TAG", "parseJOSNWithGSON:1 "+url);
                 return url;
             }else {
-                Log.i("TAG", "parseJOSNWithGSON: "+1);
+                Log.i("TAG", "parseJOSNWithGSON: "+c);
                 return "";
             }
         }catch (Exception e){

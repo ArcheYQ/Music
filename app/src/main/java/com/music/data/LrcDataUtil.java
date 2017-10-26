@@ -37,4 +37,12 @@ public class LrcDataUtil {
             db.insert(LrcData.LrcTable.TBL_NAME,null,contentValues);
         }
     }
+    //修改数据库的歌词
+    public void updateData(String lrc,Song song){
+        SQLiteDatabase db = lrcData.getReadableDatabase();
+        ContentValues contentValues =new ContentValues();
+        contentValues.put(LrcData.LrcTable.COL_LRC,lrc);
+        db.update(LrcData.LrcTable.TBL_NAME, contentValues, LrcData.LrcTable.COL_SONG+"=?", new String[]{song.getALLName()});
+    }
+
 }

@@ -1,8 +1,13 @@
 package com.music.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -110,6 +115,7 @@ public class MusicUtil{
                 if (song.getDuration()/(1000 * 60) >= 1) {     //只把1分钟以上的音乐添加到集合当中
                     song.setPosition(position);
                     list1.add(song);
+                    Log.i("songsong","+"+song.getALLName()+song.getPath());
                     position++;
                 }
                 Log.i("getMUSIC","TTTTTTTTTTT3"+list1.size());
@@ -122,8 +128,15 @@ public class MusicUtil{
         return list1;
     }
 
+
     public int getListCount(){
         return list.size();
+    }
+    public void changeList(Song song){
+        list.remove(song);
+    }
+    public List<Song> getList(){
+        return list;
     }
     public void playOrPause() {
         if (mediaPlayer == null) {
