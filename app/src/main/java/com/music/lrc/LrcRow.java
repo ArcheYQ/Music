@@ -52,15 +52,15 @@ public class LrcRow implements Comparable<LrcRow>{
          **/
         try{
             if (standardLrcLine.indexOf("[") == 0){
-                 if (standardLrcLine.indexOf("]") == 6 ||standardLrcLine.indexOf("]") == 9 ){
+                if (standardLrcLine.indexOf("]") == 6 ||standardLrcLine.indexOf("]") == 9 ){
 
-                 }else{
+                }else{
                     if (standardLrcLine.indexOf(".") == 6){
 
                     }else {
                         return null;
                     }
-                 }
+                }
             }else{
                 return null ;
             }

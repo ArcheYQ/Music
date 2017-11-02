@@ -1,6 +1,8 @@
 package com.music.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.music.R;
+import com.music.activity.NetMusicActivity;
 import com.music.bean.MusicFind;
 
 import java.util.List;
@@ -65,6 +68,17 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
                     .load(musicFind.getAlbumpic_small())
                     .crossFade()
                     .into(ivCover);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, NetMusicActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("songNetInfo",musicFind);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

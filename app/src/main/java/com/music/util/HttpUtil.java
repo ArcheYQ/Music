@@ -37,5 +37,12 @@ public class HttpUtil {
                 .build();
         client.newCall(request).enqueue(callback);
     }
+    public static void requstNetLrcData(final String id,okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://route.showapi.com/213-2?showapi_appid=46426&musicid="+id+"&showapi_sign=f908983676e94a34a11a56eb71400f79")
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
 }
 

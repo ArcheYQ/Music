@@ -105,10 +105,6 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
     private Timer timer;
     private TimerTask timerTask;
     private MsgReceiver msgReceiver;
-    //更新歌词的定时器
-    private Timer mLrcTimer;
-    //更新歌词的定时任务
-    private TimerTask mLrcTask;
     private LrcDataUtil lrcDataUtil;
     String lrc;
 
@@ -207,7 +203,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
     }
 
     public void initLRC(final Song songName, boolean ischang, final int c) {
-        lrc = lrcDataUtil.findLrc(songName);
+        lrc = lrcDataUtil.findLrc(songName.getALLName());
         if (ischang){
             HttpUtil.requstLrcData(songName.getSong(), new Callback() {
                 @Override
@@ -217,13 +213,13 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response, c));
+                    lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response, c),1);
                     if (!lrc.equals("")){
-                        lrcDataUtil.updateData(lrc,songName);
+                        lrcDataUtil.updateData(lrc,songName.getALLName());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                lrcDataUtil.addLrc(lrc, songName);
+                                lrcDataUtil.addLrc(lrc, songName.getALLName());
                                 ILrcBulider bulider = new DefaultLrcBulider();
                                 List<LrcRow> rows = bulider.getLrcRows(lrc);
                                 mLrcView.setLrc(rows);
@@ -253,12 +249,12 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response, 1));
+                        lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseJOSNWithGSON(response, 1),1);
                         Log.i("Response", "Response1" + lrc + "1");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                lrcDataUtil.addLrc(lrc, songName);
+                                lrcDataUtil.addLrc(lrc, songName.getALLName());
                                 Log.i("Response", "Response1" + lrc + "2");
                                 ILrcBulider bulider = new DefaultLrcBulider();
                                 List<LrcRow> rows = bulider.getLrcRows(lrc);
@@ -443,7 +439,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 Intent startIntent2 = new Intent(this, MusicService.class);
                 startIntent2.putExtra("action", MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
-                musicService.changNotifi();
+                musicService.changNotifi(1);
                 break;
             case R.id.iv_play:
                 if (isplay) {
@@ -520,7 +516,7 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service1) {
             musicService = ((MusicService.MusicBinder) service1).getService();
-            musicService.changNotifi();
+            musicService.changNotifi(1);
         }
 
         @Override

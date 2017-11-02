@@ -51,7 +51,6 @@ public class MusicUtil{
      */
     private Timer timer;
     public static final int TYPE_SINGLE = 4414;
-    public Song song;
     public int getPattern(){
         return pattern;
     }

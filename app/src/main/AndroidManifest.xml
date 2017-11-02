@@ -31,16 +31,17 @@
         <activity android:name=".activity.MusicActivity" />
         <activity android:name=".activity.MusicListActivity" />
 
-        <!--<receiver-->
-            <!--android:name=".M"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true">-->
-            <!--<intent-filter >-->
-                <!--<action android:name="musicnotificaion.To.PLAY"/>-->
-                <!--<action android:name="musicnotificaion.To.NEXT"/>-->
-                <!--<action android:name="musicnotificaion.To.PRE"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- <receiver -->
+        <!-- android:name=".M" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter > -->
+        <!-- <action android:name="musicnotificaion.To.PLAY"/> -->
+        <!-- <action android:name="musicnotificaion.To.NEXT"/> -->
+        <!-- <action android:name="musicnotificaion.To.PRE"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <activity android:name=".activity.NetMusicActivity"></activity>
     </application>
 
 </manifest>

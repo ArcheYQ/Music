@@ -12,6 +12,9 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.music.activity.MusicActivity;
+import com.music.bean.MusicFind;
+import com.music.util.MusicFindUtil;
 import com.music.util.MusicUtil;
 
 /**
@@ -22,27 +25,34 @@ public class MusicService extends Service {
     private final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
     private final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
     private final String MUSIC_NOTIFICATION_ACTION_PRE = "musicnotificaion.To.Pre";
+    private final String MUSIC_NOTIFICATION_ACTION_NPLAY = "musicnotificaion.To.NPLAY";
+    private final String MUSIC_NOTIFICATION_ACTION_NNEXT = "musicnotificaion.To.NNEXT";
+    private final String MUSIC_NOTIFICATION_ACTION_NPRE = "musicnotificaion.To.NPre";
     private MusicBroadCast musicBroadCast = null;
     private MusicNotification musicNotifi = null;
     /**
      * 播放音乐
      */
     public static final String COMPLETE = "4kf";
+    public static final String NCOMPLETE = "4kf1";
     public static final String START = "4k1f";
+    public static final String NSTART = "4k2f";
     /**
      * 暂停或者是播放音乐
      */
     public static final String PLAYORPAUSE = "2k5o";
-
+    public static final String NPLAYORPAUSE = "3k5o";
     /**
      * 上一首音乐
      */
     public static final String PREVIOUSMUSIC = "4si3";
-
+    public static final String NPREVIOUSMUSIC = "42i3";
     /**
      * 下一首音乐
      */
     public static final String NEXTMUSIC = "2hd3";
+    public static final String NNEXTMUSIC = "1hd3";
+
     private PowerManager.WakeLock wakeLock = null; //电源锁
 
     private Intent intent1 = new Intent("com.example.communication.CHANGE");
@@ -83,6 +93,9 @@ public class MusicService extends Service {
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_NEXT);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PRE);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_NPLAY);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_NNEXT);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_NPRE);
         registerReceiver(musicBroadCast, filter);
 
         super.onCreate();
@@ -93,6 +106,7 @@ public class MusicService extends Service {
         super.onDestroy();
         releseWakeLock();
         MusicUtil.getInstance().clean();
+        MusicFindUtil.getInstance().clean();
         unregisterReceiver(musicBroadCast);
         musicNotifi.onCancelMusicNotifi();
     }
@@ -102,9 +116,29 @@ public class MusicService extends Service {
         acquireWakeLock();
         if (intent.getStringExtra("action")!=null){
             switch (intent.getStringExtra("action")) {
+                case NSTART:
+                    MusicFindUtil.getInstance().start();
+                    musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    break;
+                case NPLAYORPAUSE:
+                    MusicFindUtil.getInstance().playOrPause();
+                    musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    break;
+                case NNEXTMUSIC:
+                    MusicFindUtil.getInstance().start();
+                    musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    break;
+                case NPREVIOUSMUSIC:
+                    MusicFindUtil.getInstance().start();
+                    musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    break;
                 case START:
                     MusicUtil.getInstance().prePlayOrNextPlay();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    break;
+                case NCOMPLETE:
+                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
                     break;
                 case COMPLETE:
                     MusicUtil.getInstance().prePlayOrNextPlay();
@@ -135,16 +169,24 @@ public class MusicService extends Service {
         }
     }
 
-    public void changNotifi(){
+    public void changNotifi(int i){
+        if (i == 1){
+            musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
 
+        }else
+        {
+            musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+        }
     }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
-             return new MusicBinder();
 
+//        musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+
+             return new MusicBinder();
     }
+
 //    public class MusicBind extends Binder{
 //        public MusicService getService() {
 //            return MusicService.this;
@@ -175,6 +217,26 @@ public class MusicService extends Service {
                 Intent startIntent2 = new Intent(getApplicationContext(), MusicService.class);
                 startIntent2.putExtra("action",MusicService.PREVIOUSMUSIC);
                 startService(startIntent2);
+                sendBroadcast(intent1);
+                break;
+            case MUSIC_NOTIFICATION_ACTION_NPLAY :
+                Intent startIntent4 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent4.putExtra("action",MusicService.NPLAYORPAUSE);
+                startService(startIntent4);
+                sendBroadcast(intent1);
+                break;
+            case MUSIC_NOTIFICATION_ACTION_NNEXT:
+                MusicFindUtil.getInstance().next();
+                Intent startIntent5 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent5.putExtra("action",MusicService.NNEXTMUSIC);
+                startService(startIntent5);
+                sendBroadcast(intent1);
+                break;
+            case MUSIC_NOTIFICATION_ACTION_NPRE:
+                MusicFindUtil.getInstance().pre();
+                Intent startIntent6 = new Intent(getApplicationContext(), MusicService.class);
+                startIntent6.putExtra("action",MusicService.NPREVIOUSMUSIC);
+                startService(startIntent6);
                 sendBroadcast(intent1);
                 break;
         }

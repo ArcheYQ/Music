@@ -35,4 +35,23 @@ public class LrcJsonUtil {
         return "";
 
     }
+    public static String parseNetJOSNWithGSON(Response response){
+        try{
+            String ResponsData = response.body().string();
+            JSONObject jsonObject = new JSONObject(ResponsData);
+            String error = jsonObject.getString("showapi_res_error");
+            if (!error.equals("")) {
+                Log.i("TAG","error");}
+            String body = jsonObject.getString("showapi_res_body");
+            JSONObject jsonObject1 = new JSONObject(body);
+            String pagebean = jsonObject1.getString("lyric");
+            Log.i("TAG","error1"+pagebean);
+            return pagebean;
+            }
+        catch (Exception e){
+
+        }
+        return "";
+
+    }
 }

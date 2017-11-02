@@ -1,5 +1,8 @@
 package com.music.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.music.R;
-import com.music.bean.MusicModle;
+import com.music.activity.NetMusicActivity;
+import com.music.bean.MusicFind;
 
 import java.util.List;
 
@@ -16,10 +20,12 @@ import java.util.List;
  */
 
 public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicFenViewHolder> {
-    List<MusicModle> musicModles;
+    List<MusicFind> musicFinds;
+    Context context;
 
-    public MusicFenAdapter(List<MusicModle> list) {
-        this.musicModles = list;
+    public MusicFenAdapter(List<MusicFind> list,Context context) {
+        this.musicFinds = list;
+        this.context = context;
     }
 
     @Override
@@ -30,12 +36,12 @@ public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicF
 
     @Override
     public void onBindViewHolder(MusicFenViewHolder holder, int position) {
-     holder.load(musicModles.get(position));
+     holder.load(musicFinds.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return musicModles==null?0:musicModles.size();
+        return musicFinds==null?0:musicFinds.size();
     }
 
     public class MusicFenViewHolder extends RecyclerView.ViewHolder {
@@ -47,9 +53,20 @@ public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicF
             tvFenleiSinger = itemView.findViewById(R.id.tv_fenlei_singer);
             tvFenleiSong = itemView.findViewById(R.id.tv_fenlei_song);
         }
-        public void load (MusicModle musicModle){
-            tvFenleiSinger.setText(musicModle.getSingername());
-            tvFenleiSong.setText(musicModle.getSongname());
+        public void load (final MusicFind musicFind){
+            tvFenleiSinger.setText(musicFind.getSingername());
+            tvFenleiSong.setText(musicFind.getSongname());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, NetMusicActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("songNetInfo",musicFind);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

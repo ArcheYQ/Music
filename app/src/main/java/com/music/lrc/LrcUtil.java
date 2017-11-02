@@ -21,33 +21,40 @@ public class LrcUtil {
 //        }
 //        return lrcUtil;
 //    }
-    public static String getLrcFromAssets(String Url){
-        Log.i("first","getLrcFromAssets: "+Url);
-        if (Url.equals("")){
+    public static String getLrcFromAssets(String Url,int i) {
+        if (i == 1) {
+            Log.i("first", "getLrcFromAssets: " + Url);
+            if (Url.equals("")) {
+                return "";
+            }
+            try {
+                URL url = new URL(Url);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true);
+                conn.setRequestMethod("GET");
+                InputStream input = conn.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(input));
+                String line = "";
+                String result = "";
+                while ((line = in.readLine()) != null) {
+                    if (line.trim().equals(""))
+                        continue;
+                    result += line + "\r\n";
+                    Log.i("first", "getLrcFromAssets: " + result);
+                }
+                Log.i("total", "getLrcFromAssets: " + result);
+                return result;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return "";
         }
-        try {
-            URL url=new URL(Url);
-            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
-            conn.setDoInput(true);
-            conn.setRequestMethod("GET");
-            InputStream input=conn.getInputStream();
-            BufferedReader in=new BufferedReader(new InputStreamReader(input));
-            String line = "" ;
-            String result = "";
-            while ((line = in.readLine() )!= null){
-                if (line.trim().equals(""))
-                    continue;
-                result += line + "\r\n";
-                Log.i("first","getLrcFromAssets: "+result);
-            }
-            Log.i("total","getLrcFromAssets: "+result);
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
+        else{
+            String str1 = Url.replaceAll("&#58;",":").replaceAll("&#46;",".").replaceAll("&#32;"," ").replaceAll("&#10;","\n").replaceAll("&#13;","").replaceAll("&#45;","-");
+            Log.i("total1", "getLrcFromAssets: " + str1);
+            return str1;
 
+        }
+    }
 }
 

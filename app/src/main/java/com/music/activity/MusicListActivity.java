@@ -1,5 +1,6 @@
 package com.music.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,9 +12,9 @@ import android.widget.TextView;
 
 import com.music.R;
 import com.music.adapter.MusicFenAdapter;
-import com.music.bean.MusicModle;
+import com.music.bean.MusicFind;
 import com.music.util.HttpUtil;
-import com.music.util.MusicModleUtil;
+import com.music.util.MusicFindUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,10 +31,10 @@ public class MusicListActivity extends BaseActivity {
     @Bind(R.id.tb_main)
     Toolbar tbMain;
     private int typeid = 5;
-    List<MusicModle> list;
     @Bind(R.id.rv_fenlei_list)
     RecyclerView rvFenleiList;
     MusicFenAdapter musicFenAdapter;
+
     private SparseArray<String> maps = new SparseArray<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class MusicListActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                musicFenAdapter = new MusicFenAdapter(MusicModleUtil.parseJOSNWithGSON(response));
+                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.parseJOSNWithGSON(response), getBaseContext());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

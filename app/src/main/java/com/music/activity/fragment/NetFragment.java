@@ -132,7 +132,7 @@ public class NetFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             refreshlayout.finishLoadmore();
-                            findMusicAdapter.addData(MusicFindUtil.parseJOSNWithGSON(response));
+                            findMusicAdapter.addData(MusicFindUtil.parseFindJOSNWithGSON(response));
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -159,7 +159,7 @@ public class NetFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         refreshlayout.finishRefresh();
-                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseJOSNWithGSON(response), getContext());
+                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getContext());
                         Log.i("TAG2", "onCreate:2 ");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -217,7 +217,7 @@ public class NetFragment extends Fragment {
                         Log.i("TAG2", "onCreate:1 ");
                         totalPage = MusicFindUtil.getInstance().getPage();
                         Log.i("totalPage", "totalPage1 " + totalPage);
-                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseJOSNWithGSON(response), getContext());
+                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getContext());
                         Log.i("TAG2", "onCreate:2 ");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

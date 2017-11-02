@@ -1,10 +1,12 @@
 package com.music.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by 雅倩宝宝 on 2017/9/21.
  */
 
-public class MusicFind {
+public class MusicFind implements Serializable {
     /**
      "albumid": "123298",
      "albumname": "Xposed",
@@ -23,6 +25,25 @@ public class MusicFind {
     private String songname;
     private String singername;
     private String url;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    private int position;
     public String getAlbumpic_big() {
         return albumpic_big;
     }
