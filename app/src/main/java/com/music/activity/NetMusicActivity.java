@@ -40,6 +40,7 @@ import com.music.lrc.LrcRow;
 import com.music.lrc.LrcUtil;
 import com.music.lrc.LrcView;
 import com.music.service.MusicService;
+import com.music.util.DownloadingUtil;
 import com.music.util.HttpUtil;
 import com.music.util.MusicFindUtil;
 import com.music.util.MusicUtil;
@@ -152,44 +153,44 @@ public class NetMusicActivity extends AppCompatActivity {
     }
     public void initLRC(final MusicFind musicFind) {
         lrc = lrcDataUtil.findLrc(musicFind.getSongname()+"-"+musicFind.getSingername());
-            if (lrc.equals("")) {
-                HttpUtil.requstNetLrcData(musicFind.getId(), new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        lrc = "";
-                        Log.i("fali", "fali" + lrc);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("fali", "fali" + lrc + "2");
-                                ILrcBulider bulider = new DefaultLrcBulider();
-                                List<LrcRow> rows = bulider.getLrcRows(lrc);
-                                Log.i("fali", "fali" + rows + "3");
-                                mLrcView.setLrc(rows);
-                            }
-                        });
-                    }
+        if (lrc.equals("")) {
+            HttpUtil.requstNetLrcData(musicFind.getId(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    lrc = "";
+                    Log.i("fali", "fali" + lrc);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("fali", "fali" + lrc + "2");
+                            ILrcBulider bulider = new DefaultLrcBulider();
+                            List<LrcRow> rows = bulider.getLrcRows(lrc);
+                            Log.i("fali", "fali" + rows + "3");
+                            mLrcView.setLrc(rows);
+                        }
+                    });
+                }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseNetJOSNWithGSON(response),2);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                lrcDataUtil.addLrc(lrc, musicFind.getSongname()+"-"+musicFind.getSingername());
-                                ILrcBulider bulider = new DefaultLrcBulider();
-                                List<LrcRow> rows = bulider.getLrcRows(lrc);
-                                mLrcView.setLrc(rows);
-                            }
-                        });
-                    }
-                });
-            } else {
-                ILrcBulider bulider = new DefaultLrcBulider();
-                List<LrcRow> rows = bulider.getLrcRows(lrc);
-                mLrcView.setLrc(rows);
-            }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    lrc = LrcUtil.getLrcFromAssets(LrcJsonUtil.parseNetJOSNWithGSON(response),2);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lrcDataUtil.addLrc(lrc, musicFind.getSongname()+"-"+musicFind.getSingername());
+                            ILrcBulider bulider = new DefaultLrcBulider();
+                            List<LrcRow> rows = bulider.getLrcRows(lrc);
+                            mLrcView.setLrc(rows);
+                        }
+                    });
+                }
+            });
+        } else {
+            ILrcBulider bulider = new DefaultLrcBulider();
+            List<LrcRow> rows = bulider.getLrcRows(lrc);
+            mLrcView.setLrc(rows);
         }
+    }
     public void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.menu_net, popupMenu.getMenu());
@@ -198,6 +199,9 @@ public class NetMusicActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_item_download:
+                        DownloadingUtil.getInstance().addList(musicFind);
+                        Log.i("ADLIST",""+DownloadingUtil.getInstance().getList().size());
+                        Toast.makeText(musicService, "已添加到下载列表o(*￣▽￣*)ブ", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return true;

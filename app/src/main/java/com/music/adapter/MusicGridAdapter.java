@@ -19,9 +19,9 @@ public class MusicGridAdapter extends BaseAdapter{
     private SparseArray<String> gridItems;
     private ViewHolder holder = null;
     private Context context;
-    private int[] ids = { R.drawable.rege26,R.drawable.gaotai6,R.drawable.kge36,
+    private int[] ids = {R.drawable.kge36,R.drawable.gaotai6,R.drawable.yinyueren32,
     R.drawable.liuxing4,R.drawable.neidi5,R.drawable.net28, R.drawable.oumei3,
-    R.drawable.xingge26,R.drawable.yinyueren32 };
+    R.drawable.xingge26, R.drawable.rege26 };
     @Override
     public int getCount() {
         return gridItems.size() > 0 ? gridItems.size() : 0;

@@ -24,6 +24,7 @@ import java.util.List;
 public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.FindMusicViewHolder> {
     List<MusicFind> musicFinds;
     Context context;
+    int pos = -1;
     public FindMusicAdapter(List<MusicFind> musicFinds,Context context){
         this.musicFinds= musicFinds;
         this.context = context;
@@ -45,7 +46,10 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
     public void onBindViewHolder(FindMusicViewHolder holder, int position) {
     holder.load(musicFinds.get(position),context);
     }
-
+    public void setPos(int i){
+        this.pos = i;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return musicFinds == null ? 0 : musicFinds.size();
@@ -64,6 +68,10 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
         public void load(final MusicFind musicFind,final Context context){
             tvFenleiSinger.setText(musicFind.getSingername());
             tvFenleiSong.setText(musicFind.getSongname());
+            if (musicFind.getPosition() ==pos){
+                tvFenleiSinger.setTextColor(Integer.parseInt("#da3318"));
+                tvFenleiSong.setTextColor(Integer.parseInt("#da3318"));
+            }
             Glide.with(context)
                     .load(musicFind.getAlbumpic_small())
                     .crossFade()

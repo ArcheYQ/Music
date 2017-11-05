@@ -17,6 +17,12 @@
         <item name="android:windowBackground">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-
+    <style name="ThemeSplash" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@drawable/firstbg</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
 </resources>

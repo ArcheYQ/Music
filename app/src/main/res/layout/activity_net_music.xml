@@ -1,101 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg1"
+    tools:context="com.music.activity.NetMusicActivity">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/play_page_default_bg"
-        tools:context="com.music.activity.NetMusicActivity">
+        android:background="#805b5959"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_arrow_down" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="人海- 2015版"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_singer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="燕池"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:id="@+id/iv_more"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/more" />
+        </RelativeLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:lrc="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
-            <RelativeLayout
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_musci_play"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="never">
+            </android.support.v4.view.ViewPager>
 
-                <ImageView
-                    android:id="@+id/iv_back"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/ic_arrow_down" />
-
-                <LinearLayout
-                    android:gravity="center_vertical"
-                    android:layout_toRightOf="@id/iv_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="人海- 2015版"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_singer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="燕池"
-                        android:textColor="@color/grey"
-                        android:textSize="12sp" />
-                </LinearLayout>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/iv_more"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/more" />
-            </RelativeLayout>
-
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:lrc="http://schemas.android.com/apk/res-auto"
+            <com.music.lrc.LrcView
+                android:id="@+id/lrc_mLrcView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/vp_musci_play"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:overScrollMode="never">
-                </android.support.v4.view.ViewPager>
-
-                <com.music.lrc.LrcView
-                    android:id="@+id/lrc_mLrcView"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="10dp"
-                    />
-                <include layout="@layout/include_play_page_controller"/>
-            </LinearLayout>
-            <com.music.widget.IndicatorLayout
-                android:id="@+id/il_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp" />
-
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                />
+            <include layout="@layout/include_play_page_controller"/>
         </LinearLayout>
-    </LinearLayout>
+        <com.music.widget.IndicatorLayout
+            android:id="@+id/il_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp" />
 
+    </LinearLayout>
+</LinearLayout>

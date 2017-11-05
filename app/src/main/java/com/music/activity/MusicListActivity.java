@@ -72,9 +72,9 @@ public class MusicListActivity extends BaseActivity {
         });
     }
     private void initTypes() {
-        maps.put(26,getString(R.string.msuic_fenlei_rege));
+        maps.put(36,getString(R.string.msuic_fenlei_rege));
         maps.put(6,getString(R.string.music_fenlei_gantai));
-        maps.put(36,getString(R.string.music_fenlei_Kge));
+        maps.put(18,getString(R.string.music_fenlei_Kge));
         maps.put(4,getString(R.string.music_fenlei_liuxing) );
         maps.put(5,getString(R.string.music_fenlei_neidi));
         maps.put(28,getString(R.string.music_fenlei_net));

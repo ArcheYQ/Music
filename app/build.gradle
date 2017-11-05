@@ -21,6 +21,7 @@ android {
 }
 
 dependencies {
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -36,6 +37,7 @@ dependencies {
     //HTTP访问网络
     //版本随意
     //没有使用特殊Header，可以不加这行
+    compile 'com.youth.banner:banner:1.4.10'
     compile 'com.zhy:mpermission-api:1.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'

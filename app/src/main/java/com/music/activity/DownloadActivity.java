@@ -1,7 +1,6 @@
 package com.music.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,21 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.music.R;
+import com.music.activity.fragment.DownloadingFragment;
 import com.music.activity.fragment.LocalFragment;
 import com.music.activity.fragment.NetFragment;
 import com.music.adapter.FragmentAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import qiu.niorgai.StatusBarCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class DownloadActivity extends AppCompatActivity {
 
+    @Bind(R.id.iv_back)
+    ImageView ivBack;
     @Bind(R.id.tb_main)
     Toolbar tbMain;
     @Bind(R.id.tv_local)
@@ -39,21 +39,17 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout vvMain;
     @Bind(R.id.vp_main)
     ViewPager vpMain;
-    @Bind(R.id.iv_down)
-    ImageView ivDown;
     private FragmentAdapter adapter;
     private int currentIndex;
     private int screenWidth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.setStatusBarColor(this, Color.parseColor("#da3318"));
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_download);
         ButterKnife.bind(this);
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new NetFragment());
-        fragments.add(new LocalFragment());
+        fragments.add(new DownloadingFragment());
+        fragments.add(new DownloadingFragment());
         screenWidth = getWindowManager().getDefaultDisplay().getWidth() - dip2px(this, 20);
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vvMain.getLayoutParams();
         lp.width = screenWidth / 2;
@@ -74,26 +70,26 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
+            public void onPageSelected(int i) {
+                if (i == 0) {
                     tvLocal.setTextColor(Color.parseColor("#da3318"));
                     tvNetwork.setTextColor(Color.BLACK);
                     currentIndex = 0;
                     LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vvMain.getLayoutParams();
                     lp.leftMargin = 0;
                     vvMain.setLayoutParams(lp);
-                } else if (position == 1) {
+                } else if (i == 1) {
                     tvLocal.setTextColor(Color.BLACK);
                     tvNetwork.setTextColor(Color.parseColor("#da3318"));
                     currentIndex = 1;
                     LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vvMain.getLayoutParams();
-                    lp.leftMargin = screenWidth / 4;
+                    lp.leftMargin = screenWidth / 2;
                     vvMain.setLayoutParams(lp);
                 }
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onPageScrollStateChanged(int i) {
 
             }
         });
@@ -101,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         tvLocal.setTextColor(Color.parseColor("#da3318"));
         tvNetwork.setTextColor(Color.BLACK);
         currentIndex = 0;
-
     }
 
     public static int dip2px(Context context, float dpValue) {
@@ -110,20 +105,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_local, R.id.tv_network,R.id.iv_down})
+    @OnClick({R.id.iv_back, R.id.tv_local, R.id.tv_network})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.tv_local:
                 vpMain.setCurrentItem(0);
                 break;
             case R.id.tv_network:
                 vpMain.setCurrentItem(1);
                 break;
-            case R.id.iv_down:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, DownloadActivity.class);
-                startActivity(intent);
-                break;
         }
     }
-}
+        }

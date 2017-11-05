@@ -114,7 +114,7 @@ public class MusicService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         acquireWakeLock();
-        if (intent.getStringExtra("action")!=null){
+        if (intent!=null){
             switch (intent.getStringExtra("action")) {
                 case NSTART:
                     MusicFindUtil.getInstance().start();
@@ -137,7 +137,7 @@ public class MusicService extends Service {
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
                     break;
                 case NCOMPLETE:
-                    MusicUtil.getInstance().prePlayOrNextPlay();
+                    MusicFindUtil.getInstance().start();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
                     break;
                 case COMPLETE:
