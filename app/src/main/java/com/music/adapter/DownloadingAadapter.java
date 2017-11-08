@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.music.R;
 import com.music.bean.MusicFind;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -52,4 +53,7 @@ public class DownloadingAadapter extends RecyclerView.Adapter<DownloadingAadapte
             tvfragmentingSong.setText(musicFind.getSongname());
         }
     }
+    public void deleteList(){
+        musicFinds = new ArrayList<>();
+    notifyDataSetChanged();}
 }

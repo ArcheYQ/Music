@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/delete"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:visibility="invisible"/>
         <ImageView
             android:id="@+id/iv_stopOrStar"
             android:layout_marginRight="50dp"

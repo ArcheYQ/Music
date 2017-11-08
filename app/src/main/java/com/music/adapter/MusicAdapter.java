@@ -2,8 +2,10 @@ package com.music.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,11 @@ import android.widget.TextView;
 
 import com.music.R;
 import com.music.bean.Song;
+import com.music.util.MusicUtil;
 
 import java.util.List;
 
-;
+;import static android.content.ContentValues.TAG;
 
 /**
  * Created by 雅倩宝宝 on 2017/9/7.
@@ -34,7 +37,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         this.list = list;
         notifyDataSetChanged();
     }
-
+    public void setPlay(){
+        notifyDataSetChanged();
+    }
 
     @Override
     public MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -65,6 +70,16 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
              tvSinger.setText(song.getSinger());
              tvSize.setText(convertFileSize(song.getSize()));
              tvSong.setText(song.getSong());
+             if (song.getPath().equals(MusicUtil.getInstance().getPre())){
+                 Log.i(TAG, "RED"+song.getPath()+MusicUtil.getInstance().getPre());
+                 tvSize.setTextColor(Color.parseColor("#da3318"));
+                 tvSinger.setTextColor(Color.parseColor("#da3318"));
+                 tvSong.setTextColor(Color.parseColor("#da3318"));
+             }else{
+                 tvSize.setTextColor(Color.parseColor("#959595"));
+                 tvSinger.setTextColor(Color.parseColor("#959595"));
+                 tvSong.setTextColor(Color.parseColor("#000000"));
+             }
              itemView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {

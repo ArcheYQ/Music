@@ -2,5 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="下载功能敬请期待(●'◡'●)\n（真实情况：其实我有写下载功能的，\n可是QQ音乐的API不提供下载链接，\n哭泣T.T）"/>
 </LinearLayout>

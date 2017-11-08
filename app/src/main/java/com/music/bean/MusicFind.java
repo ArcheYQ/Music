@@ -92,5 +92,20 @@ public class MusicFind implements Serializable {
         this.url = url;
     }
 
+    @Override
+    public boolean equals(Object obj) {
 
+        if(null == obj) {
+            return false;
+        }
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+
+        MusicFind musicFind = (MusicFind) obj;
+        if(!musicFind.getUrl().equals(((MusicFind) obj).getUrl())) {
+            return false;
+        }
+        return true;
+    }
 }

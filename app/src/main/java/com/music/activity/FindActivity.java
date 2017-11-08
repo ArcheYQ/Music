@@ -1,7 +1,10 @@
 package com.music.activity;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,6 +49,7 @@ public class FindActivity extends AppCompatActivity {
     private String name;
     FindMusicAdapter findMusicAdapter;
     private Dialog progressDialog;
+    MsgReceiver msgReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,10 +87,12 @@ public class FindActivity extends AppCompatActivity {
                 Log.i("totalPage", "totalPage3 " + totalPage);
             }
         });
-
         ButterKnife.bind(this);
+        if (findMusicAdapter!=null){
+            findMusicAdapter.setPlay();
+        }
         initView();
-//        findMusicAdapter.setPos(MusicFindUtil.getInstance().getCurrentSongPosition());
+        initData();
     }
     public void showProgressDialog() {
         if (progressDialog == null) {
@@ -103,6 +109,36 @@ public class FindActivity extends AppCompatActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(msgReceiver);
+        super.onDestroy();
+    }
+
+    public void initData(){
+       msgReceiver = new MsgReceiver();
+       IntentFilter intentFilter = new IntentFilter();
+       intentFilter.addAction("com.example.communication.CHANGE");
+       intentFilter.addAction("com.example.communication.LISTCHANGE");
+       registerReceiver(msgReceiver, intentFilter);
+   }
+    public class MsgReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (findMusicAdapter!=null){
+                findMusicAdapter.setPlay();
+            }
+        }
+    }
+    @Override
+    protected void onResume() {
+        if (findMusicAdapter!=null){
+            findMusicAdapter.setPlay();
+        }
+        super.onResume();
     }
 
     public void initView() {

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.music.R;
+import com.music.activity.fragment.DownloadedFragment;
 import com.music.activity.fragment.DownloadingFragment;
 import com.music.activity.fragment.LocalFragment;
 import com.music.activity.fragment.NetFragment;
@@ -49,7 +50,7 @@ public class DownloadActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new DownloadingFragment());
-        fragments.add(new DownloadingFragment());
+        fragments.add(new DownloadedFragment());
         screenWidth = getWindowManager().getDefaultDisplay().getWidth() - dip2px(this, 20);
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vvMain.getLayoutParams();
         lp.width = screenWidth / 2;

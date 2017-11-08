@@ -56,7 +56,7 @@ public class MusicService extends Service {
     private PowerManager.WakeLock wakeLock = null; //电源锁
 
     private Intent intent1 = new Intent("com.example.communication.CHANGE");
-
+    private Intent intent2 = new Intent("com.example.communication.LISTCHANGE");
     private void acquireWakeLock() {
         if (null == wakeLock) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -119,42 +119,52 @@ public class MusicService extends Service {
                 case NSTART:
                     MusicFindUtil.getInstance().start();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case NPLAYORPAUSE:
                     MusicFindUtil.getInstance().playOrPause();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case NNEXTMUSIC:
                     MusicFindUtil.getInstance().start();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case NPREVIOUSMUSIC:
                     MusicFindUtil.getInstance().start();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case START:
                     MusicUtil.getInstance().prePlayOrNextPlay();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case NCOMPLETE:
                     MusicFindUtil.getInstance().start();
                     musicNotifi.onUpdataNetMusicNotifi(MusicFindUtil.getInstance().getNewSongInfo(),MusicFindUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case COMPLETE:
                     MusicUtil.getInstance().prePlayOrNextPlay();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case PLAYORPAUSE:
                     MusicUtil.getInstance().playOrPause();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case PREVIOUSMUSIC:
                     MusicUtil.getInstance().prePlayOrNextPlay();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
                 case NEXTMUSIC:
                     MusicUtil.getInstance().prePlayOrNextPlay();
                     musicNotifi.onUpdataMusicNotifi(MusicUtil.getInstance().getNewSongInfo(),MusicUtil.getInstance().isPlaying());
+                    sendBroadcast(intent2);
                     break;
         }
 

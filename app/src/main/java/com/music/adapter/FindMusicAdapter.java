@@ -2,6 +2,7 @@ package com.music.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.music.R;
 import com.music.activity.NetMusicActivity;
 import com.music.bean.MusicFind;
+import com.music.util.MusicFindUtil;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
 public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.FindMusicViewHolder> {
     List<MusicFind> musicFinds;
     Context context;
-    int pos = -1;
+
     public FindMusicAdapter(List<MusicFind> musicFinds,Context context){
         this.musicFinds= musicFinds;
         this.context = context;
@@ -46,8 +48,7 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
     public void onBindViewHolder(FindMusicViewHolder holder, int position) {
     holder.load(musicFinds.get(position),context);
     }
-    public void setPos(int i){
-        this.pos = i;
+    public void setPlay(){
         notifyDataSetChanged();
     }
     @Override
@@ -68,9 +69,13 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
         public void load(final MusicFind musicFind,final Context context){
             tvFenleiSinger.setText(musicFind.getSingername());
             tvFenleiSong.setText(musicFind.getSongname());
-            if (musicFind.getPosition() ==pos){
-                tvFenleiSinger.setTextColor(Integer.parseInt("#da3318"));
-                tvFenleiSong.setTextColor(Integer.parseInt("#da3318"));
+            if (musicFind.getId().equals(MusicFindUtil.getInstance().getID())){
+                tvFenleiSinger.setTextColor(Color.parseColor("#da3318"));
+                tvFenleiSong.setTextColor(Color.parseColor("#da3318"));
+            }else
+            {
+                tvFenleiSinger.setTextColor(Color.parseColor("#959595"));
+                tvFenleiSong.setTextColor(Color.parseColor("#000000"));
             }
             Glide.with(context)
                     .load(musicFind.getAlbumpic_small())

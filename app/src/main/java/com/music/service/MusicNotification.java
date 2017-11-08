@@ -10,6 +10,9 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.music.R;
+import com.music.activity.DownloadActivity;
+import com.music.activity.MusicActivity;
+import com.music.activity.NetMusicActivity;
 import com.music.bean.MusicFind;
 import com.music.bean.Song;
 
@@ -95,15 +98,18 @@ public class MusicNotification extends Notification {
                 close, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__pre,
                 pclose);
-
+        Intent intent = new Intent(context, MusicActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
         builder.setContent(remoteViews).setWhen(System.currentTimeMillis())
                 // 通知产生的时间，会在通知信息里显示
 //				.setPriority(Notification.PRIORITY_DEFAULT)
                 // 设置该通知优先级
+                .setContentIntent(pendingIntent)
                 .setOngoing(true).setTicker("播放新的一首歌")
                 .setSmallIcon(R.drawable.miao);
 
         // 兼容性实现
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             musicNotifi = builder.getNotification();
         } else {
@@ -116,8 +122,8 @@ public class MusicNotification extends Notification {
     public void onCreateNetMusicNotifi() {
         // 设置点击事件
 
-        // 1.注册控制点击事件
 
+        // 1.注册控制点击事件
         PendingIntent npplay = PendingIntent.getBroadcast(context, REQUEST_CODE,
                 nplay,0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__stopOrStart,
@@ -136,13 +142,16 @@ public class MusicNotification extends Notification {
                 nclose, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_notigication__pre,
                 npclose);
-
+        Intent intent = new Intent(context, NetMusicActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
         builder.setContent(remoteViews).setWhen(System.currentTimeMillis())
                 // 通知产生的时间，会在通知信息里显示
 //				.setPriority(Notification.PRIORITY_DEFAULT)
                 // 设置该通知优先级
+                .setContentIntent(pendingIntent)
                 .setOngoing(true).setTicker("播放新的一首歌")
                 .setSmallIcon(R.drawable.miao);
+
 
         // 兼容性实现
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {

@@ -29,6 +29,7 @@ public class MusicFindUtil {
     private boolean isPrepare = false;
     private static MediaPlayer mediaPlayer = MusicUtil.getInstance().getMediaPlayer();
     private static List<MusicFind> list2;
+    private static List<MusicFind> list3;
     private static List<MusicFind> totalList;
     private static int totalPage;
     private static String allPages;
@@ -40,7 +41,7 @@ public class MusicFindUtil {
     /**
      * 播放模式
      */
-
+     public String playID;
     private int pattern = TYPE_ORDER;
     /**
      * 随机播放
@@ -82,6 +83,12 @@ public class MusicFindUtil {
         mediaPlayer.release();
 
     }
+    public MusicFind getMusic(){
+        if (list2 == null){
+                list2 = new ArrayList<>();
+    }
+        return list2.get(currentSongPosition);
+    }
     public void pre(){
         preSongPosition = currentSongPosition;
         if (pattern == TYPE_ORDER||pattern == TYPE_SINGLE) {
@@ -113,6 +120,12 @@ public class MusicFindUtil {
             musicFindUtil = new MusicFindUtil();
         }
         return musicFindUtil;
+    }
+    public String getID(){
+        return playID;
+    }
+    public void  setID(String id){
+        playID = id;
     }
     public int getPage(){
         try {
@@ -188,9 +201,11 @@ public class MusicFindUtil {
     public void deleteDate(){
         totalList = new ArrayList<>();
     }
-    public static List<MusicFind> parseJOSNWithGSON (Response response){
+    public static List<MusicFind> parseJOSNWithGSON (Response response,boolean isRe){
         Log.i("TAG", "onCreate:5"+"");
         list2 = new ArrayList<>();
+
+
         try{
             String ResponsData = response.body().string();
             JSONObject jsonObject = new JSONObject(ResponsData);
@@ -213,12 +228,33 @@ public class MusicFindUtil {
                 musicfind.setUrl(jsonObject3.getString("url"));
                 musicfind.setId(jsonObject3.getString("songid"));
                 musicfind.setPosition(i);
-                list2.add(musicfind);
+                if (isRe == false){
+                    list2.add(musicfind);
+                }else{
+                    if (list3 ==null){
+                        list3 = new ArrayList<>();
+                    }
+                    list3.add(musicfind);
+                }
+
             }
         }catch (Exception e ){
             e.printStackTrace();
         }
-        return list2;
+        if (isRe == false){
+            return list2;
+        }else{
+            list2 = list3;
+            return list3;
+        }
+    }
+    public List<MusicFind>  getListRe(){
+        if (list3==null){
+            list3 = new ArrayList<>();
+        }
+        list2 = list3;
+            return list3;
+
     }
     public int getCurrentSongPosition(){
         return currentSongPosition;
@@ -261,6 +297,8 @@ public class MusicFindUtil {
                 e.printStackTrace();
             }
             mediaPlayer.start();
+            playID = list2.get(currentSongPosition).getId();
+            MusicUtil.getInstance().setPre(playID);
             isPrepare = false;
             if (currentSongPosition == -1) {
                 preSongPosition = currentSongPosition;

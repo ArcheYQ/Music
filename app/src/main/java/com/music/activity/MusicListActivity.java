@@ -1,6 +1,9 @@
 package com.music.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +37,7 @@ public class MusicListActivity extends BaseActivity {
     @Bind(R.id.rv_fenlei_list)
     RecyclerView rvFenleiList;
     MusicFenAdapter musicFenAdapter;
-
+    MsgReceiver msgReceiver;
     private SparseArray<String> maps = new SparseArray<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class MusicListActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.parseJOSNWithGSON(response), getBaseContext());
+                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.parseJOSNWithGSON(response,false), getBaseContext());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -70,6 +73,14 @@ public class MusicListActivity extends BaseActivity {
 
             }
         });
+        if (musicFenAdapter!=null){
+            musicFenAdapter.setPlay();
+        }
+        msgReceiver = new MsgReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.communication.CHANGE");
+        intentFilter.addAction("com.example.communication.LISTCHANGE");
+        registerReceiver(msgReceiver, intentFilter);
     }
     private void initTypes() {
         maps.put(36,getString(R.string.msuic_fenlei_rege));
@@ -81,5 +92,27 @@ public class MusicListActivity extends BaseActivity {
         maps.put(3,getString(R.string.music_fenlei_oumei));
         maps.put(27,getString(R.string.music_fenlei_xingge));
         maps.put(32,getString(R.string.music_fenlei_yinyueren));
+    }
+    public class MsgReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (musicFenAdapter!=null){
+                musicFenAdapter.setPlay();
+            }
+        }
+    }
+    @Override
+    protected void onResume() {
+        if (musicFenAdapter!=null){
+            musicFenAdapter.setPlay();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(msgReceiver);
+        super.onDestroy();
     }
 }

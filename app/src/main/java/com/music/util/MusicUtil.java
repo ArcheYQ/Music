@@ -31,7 +31,7 @@ public class MusicUtil{
     private boolean isPrepare = false;
     private static MediaPlayer mediaPlayer;
     private static MusicUtil musicUtils;
-
+    private String pre;
     private List<Song> list;//本地歌曲数据
     /**
      * 顺序播放
@@ -69,9 +69,6 @@ public class MusicUtil{
    public int getCurrentSongPosition(){
         return currentSongPosition;
     }
-    public int getPreSongPosition(){
-        return preSongPosition;
-    }
     //获得一个MusicUtil实例
     public synchronized static MusicUtil getInstance(){
         if (musicUtils == null) {
@@ -79,7 +76,9 @@ public class MusicUtil{
         }
         return musicUtils;
     }
-
+    public String getPre(){
+        return pre;
+    }
     public List<Song> SearchSong(String name) {
         List<Song> list2 = new ArrayList<>();
         for (Song song : list) {
@@ -90,7 +89,9 @@ public class MusicUtil{
         }
         return list2;
         }
-
+    public void setPre(String p){
+        pre = p;
+    }
     public List<Song> getLocalMusci(Context context) {
         List<Song> list1 = new ArrayList<Song>();
         int position = 0;
@@ -107,7 +108,8 @@ public class MusicUtil{
                 song.setId(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)));
                 if(song.getSong().contains("-")){
                     String Name[] = song.getSong().split("-");
-                    String name = Name[1].contains(".mp3")?Name[1].split(".mp3")[0] : Name[1];
+                    String name = Name[1].toString().split(".mp3")[0].indexOf("[mqms2]") > 0
+                            ? Name[1].toString().split(".mp3")[0].substring(0, Name[1].toString().split(".mp3")[0].indexOf("[mqms2]")) : Name[1].toString().split(".mp3")[0];
                     song.setSong(name);
                     song.setSinger(Name[0]);
                 }
@@ -186,18 +188,14 @@ public class MusicUtil{
             if (currentSongPosition == -1) {
                 preSongPosition = currentSongPosition;
             }
-
+            pre = list.get(currentSongPosition).getPath();
+                 Log.i(TAG, "RED"+pre);
+            MusicFindUtil.getInstance().setID(pre);
     }
     public void clean() {
         mediaPlayer.stop();
         mediaPlayer.release();
 
-    }
-    public int getDuration(){
-        if (mediaPlayer == null) {
-            return 0;
-        }
-        return mediaPlayer.getDuration();
     }
     public int getCurrentPosition(){
         if (mediaPlayer == null) {
@@ -231,16 +229,13 @@ public class MusicUtil{
         if (list!=null){
         playMusic(list.get(currentSongPosition));}
     }
+
     public Song getNewSongInfo(){
         if(list!=null)
             return list.get(currentSongPosition);
         return null;
     }
-    public Song getPreSongInfo(){
-        if(list.get(currentSongPosition)==null)
-            Log.d(TAG, "getNewSongInfo: "+"孔");
-        return list.get(preSongPosition);
-    }
+
     public void next(){
         preSongPosition = currentSongPosition;
         if (pattern == TYPE_ORDER||pattern == TYPE_SINGLE) {

@@ -1,7 +1,10 @@
 package com.music.activity.fragment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,7 +49,7 @@ public class LocalFragment extends Fragment {
     ArrayList<Song> song;
     @Bind(R.id.et_findlocal)
     EditText etFindlocal;
-
+    MsgReceiver msgReceiver;
 
     @Nullable
     @Override
@@ -83,7 +86,14 @@ public class LocalFragment extends Fragment {
                 musicAdapter.setList(MusicUtil.getInstance().SearchSong(etFindlocal.getText().toString()));
             }
         });
-
+        if (musicAdapter!=null){
+            musicAdapter.setPlay();
+        }
+        msgReceiver = new MsgReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.communication.CHANGE");
+        intentFilter.addAction("com.example.communication.LISTCHANGE");
+        getActivity().registerReceiver(msgReceiver, intentFilter);
         return view;
     }
 
@@ -105,6 +115,7 @@ public class LocalFragment extends Fragment {
     }
     @Override
     public void onDestroyView() {
+        getActivity().unregisterReceiver(msgReceiver);
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
@@ -118,5 +129,20 @@ public class LocalFragment extends Fragment {
         }
           return false;
     }
+    public class MsgReceiver extends BroadcastReceiver {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (musicAdapter!=null){
+                musicAdapter.setPlay();
+            }
+        }
+    }
+    @Override
+    public void onResume() {
+        if (musicAdapter!=null){
+            musicAdapter.setPlay();
+        }
+        super.onResume();
+    }
 }

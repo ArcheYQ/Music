@@ -21,8 +21,9 @@
             android:name=".service.MusicService"
             android:exported="false" />
 
-        <activity android:name=".activity.FirstActivity"
-                   android:theme="@style/ThemeSplash"  >
+        <activity
+            android:name=".activity.FirstActivity"
+            android:theme="@style/ThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +47,11 @@
         <activity android:name=".activity.NetMusicActivity" />
         <activity android:name=".activity.DownloadActivity" />
         <activity android:name=".activity.FindActivity" />
-        <!--<activity android:name=".activity.FirstActivity"></activity>-->
+        <!-- <activity android:name=".activity.FirstActivity"></activity> -->
+        <service
+            android:name=".service.DownloadService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

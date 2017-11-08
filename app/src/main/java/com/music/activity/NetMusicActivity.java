@@ -28,6 +28,7 @@ import com.music.R;
 import com.music.activity.fragment.LocalFragment;
 import com.music.activity.fragment.LrcFragment;
 import com.music.adapter.FragmentAdapter;
+import com.music.adapter.MusicFenAdapter;
 import com.music.bean.MusicFind;
 import com.music.bean.Song;
 import com.music.data.LrcData;
@@ -133,6 +134,7 @@ public class NetMusicActivity extends AppCompatActivity {
                 startIntent4.putExtra("action", MusicService.NCOMPLETE);
                 startService(startIntent4);
                 changInfo();
+
             }
         });
         MusicFindUtil.getInstance().getMediaPlayer().setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
@@ -218,16 +220,27 @@ public class NetMusicActivity extends AppCompatActivity {
 
     public void initData(){
         musicFind = (MusicFind) getIntent().getSerializableExtra("songNetInfo");
+        if (musicFind == null){
+            musicFind =MusicFindUtil.getInstance().getMusic();
+        }
         lrcDataUtil = new LrcDataUtil(this);
-        if (musicFind.getPosition() != MusicFindUtil.getInstance().getCurrentSongPosition()) {
+        if (MusicFindUtil.getInstance().getCurrentSongPosition()== -1){
             MusicFindUtil.getInstance().setCurrentSongPosition(musicFind.getPosition());
             Intent startIntent1 = new Intent(this, MusicService.class);
             startIntent1.putExtra("action", MusicService.NSTART);
             startService(startIntent1);
             isplay = true;
-        } else {
-            isplay = MusicFindUtil.getInstance().isPlaying();
         }
+        if (!musicFind.getId().equals(MusicFindUtil.getInstance().getID())) {
+                MusicFindUtil.getInstance().setCurrentSongPosition(musicFind.getPosition());
+                Intent startIntent1 = new Intent(this, MusicService.class);
+                startIntent1.putExtra("action", MusicService.NSTART);
+                startService(startIntent1);
+                isplay = true;
+            } else {
+                isplay = MusicFindUtil.getInstance().isPlaying();
+            }
+
         MusicFindUtil.getInstance().setCurrentSongPosition(musicFind.getPosition());
         if (isplay == true) {
             ivPlay.setImageResource(R.drawable.play_btn_pause_selector);
@@ -293,6 +306,13 @@ public class NetMusicActivity extends AppCompatActivity {
                 ivPlay.setImageResource(R.drawable.play_btn_play_selector);
             }
         }
+    }
+    @Override
+    protected void onDestroy() {
+
+        unbindService(connection);
+        unregisterReceiver(msgReceiver);
+        super.onDestroy();
     }
     @OnClick({R.id.iv_back, R.id.iv_more, R.id.iv_mode, R.id.iv_prev, R.id.iv_play, R.id.iv_next})
     public void onViewClicked(View view) {

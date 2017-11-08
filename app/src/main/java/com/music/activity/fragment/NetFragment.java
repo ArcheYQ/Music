@@ -1,8 +1,10 @@
 package com.music.activity.fragment;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -64,22 +66,20 @@ public class NetFragment extends Fragment {
     EditText etFindlocal;
     @Bind(R.id.main_gridview)
     GridView mainGridview;
-    @Bind(R.id.rv_net_song)
-    RecyclerView rvNetSong;
-    @Bind(R.id.vv_xian)
-    View vvXian;
-    @Bind(R.id.rl_scroll)
-    RelativeLayout rlScroll;
+//    @Bind(R.id.rv_net_song)
+//    RecyclerView rvNetSong;
+//    @Bind(R.id.vv_xian)
+//    View vvXian;
     private SparseArray<String> gridItems = new SparseArray<String>();
     private Map<String, Integer> maps = new HashMap<String, Integer>();
     MusicGridAdapter musicGridAdapter;
-    MusicFenAdapter musicFenAdapter;
+//    MusicFenAdapter musicFenAdapter;
     private Dialog progressDialog;
     Banner banner;
     private List<Integer> images;
     private List<String> strings;
 //    Animation showAction, hideAction;
-
+//     MsgReceiver msgReceiver;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,28 +99,28 @@ public class NetFragment extends Fragment {
         mainGridview.setOnItemClickListener(new mainGridviewListener());
         ButterKnife.bind(this, view);
 //        showProgressDialog();
-        HttpUtil.requestStringData(26, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("TAG", "onCreate:2 " + e);
-//                dissmiss();
-            }
+//        HttpUtil.requestStringData(26, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.i("TAG", "onCreate:2 " + e);
+////                dissmiss();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.parseJOSNWithGSON(response,true), getContext());
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        rvNetSong.setLayoutManager(new LinearLayoutManager(getContext()));
+//                        rvNetSong.setItemAnimator(new DefaultItemAnimator());
+//                        rvNetSong.setAdapter(musicFenAdapter);
+////                        dissmiss();
+//                    }
+//                });
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.parseJOSNWithGSON(response), getContext());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        rvNetSong.setLayoutManager(new LinearLayoutManager(getContext()));
-                        rvNetSong.setItemAnimator(new DefaultItemAnimator());
-                        rvNetSong.setAdapter(musicFenAdapter);
-//                        dissmiss();
-                    }
-                });
-
-            }
-        });
+//            }
+//        });
         return view;
     }
 
@@ -150,6 +150,11 @@ public class NetFragment extends Fragment {
         strings.add("没有大笑的一天是浪费的一天");
         strings.add("想要为你写歌 可我只会画画");
         strings.add("你走进我心里最荒凉的地方 开出一朵花");
+//        msgReceiver = new MsgReceiver();
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("com.example.communication.CHANGE");
+//        intentFilter.addAction("com.example.communication.LISTCHANGE");
+//        getActivity().registerReceiver(msgReceiver, intentFilter);
     }
     public void showProgressDialog() {
         if (progressDialog == null) {
@@ -184,7 +189,23 @@ public class NetFragment extends Fragment {
         return (int) (dpValue * scale + 0.5f);
     }
 
-
+    @Override
+    public void onResume() {
+//                musicFenAdapter = new MusicFenAdapter(MusicFindUtil.getInstance().getListRe(), getContext());
+//                rvNetSong.setLayoutManager(new LinearLayoutManager(getContext()));
+//                rvNetSong.setItemAnimator(new DefaultItemAnimator());
+//                rvNetSong.setAdapter(musicFenAdapter);
+        super.onResume();
+    }
+//    public class MsgReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (musicFenAdapter!=null){
+//                musicFenAdapter.setPlay();
+//            }
+//        }
+//    }
     /**
      * GirdView点击事件
      */
@@ -219,6 +240,7 @@ public class NetFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+//        getActivity().unregisterReceiver(msgReceiver);
         super.onDestroyView();
         ButterKnife.unbind(this);
     }

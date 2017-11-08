@@ -2,6 +2,7 @@ package com.music.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.music.R;
 import com.music.activity.NetMusicActivity;
 import com.music.bean.MusicFind;
+import com.music.util.MusicFindUtil;
 
 import java.util.List;
 
@@ -38,7 +40,9 @@ public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicF
     public void onBindViewHolder(MusicFenViewHolder holder, int position) {
      holder.load(musicFinds.get(position));
     }
-
+    public void setPlay(){
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return musicFinds==null?0:musicFinds.size();
@@ -56,6 +60,14 @@ public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicF
         public void load (final MusicFind musicFind){
             tvFenleiSinger.setText(musicFind.getSingername());
             tvFenleiSong.setText(musicFind.getSongname());
+            if (musicFind.getId().equals(MusicFindUtil.getInstance().getID())){
+                tvFenleiSinger.setTextColor(Color.parseColor("#da3318"));
+                tvFenleiSong.setTextColor(Color.parseColor("#da3318"));
+            }else
+            {
+                tvFenleiSinger.setTextColor(Color.parseColor("#959595"));
+                tvFenleiSong.setTextColor(Color.parseColor("#000000"));
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
