@@ -25,6 +25,7 @@ import java.util.logging.Handler;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.Bmob;
 import qiu.niorgai.StatusBarCompat;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         StatusBarCompat.setStatusBarColor(this, Color.parseColor("#da3318"));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Bmob.initialize(this, "732e01a3793251f76d393dd09d5766aa");
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new NetFragment());
         fragments.add(new LocalFragment());

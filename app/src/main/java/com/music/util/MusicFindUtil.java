@@ -293,16 +293,17 @@ public class MusicFindUtil {
                 mediaPlayer.setDataSource(list2.get(currentSongPosition).getUrl());
                 isPrepare = true;
                 mediaPlayer.prepare();
-            } catch (IOException e) {
+                mediaPlayer.start();
+                playID = list2.get(currentSongPosition).getId();
+                MusicUtil.getInstance().setPre(playID);
+                isPrepare = false;
+                if (currentSongPosition == -1) {
+                    preSongPosition = currentSongPosition;
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            mediaPlayer.start();
-            playID = list2.get(currentSongPosition).getId();
-            MusicUtil.getInstance().setPre(playID);
-            isPrepare = false;
-            if (currentSongPosition == -1) {
-                preSongPosition = currentSongPosition;
-            }
+
 
         }
     public void setCurrentSongPosition(int p){

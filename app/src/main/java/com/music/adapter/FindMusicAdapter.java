@@ -23,7 +23,7 @@ import java.util.List;
  * Created by 雅倩宝宝 on 2017/9/21.
  */
 
-public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.FindMusicViewHolder> {
+public abstract class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.FindMusicViewHolder> {
     List<MusicFind> musicFinds;
     Context context;
 
@@ -90,10 +90,17 @@ public class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAdapter.Find
                     bundle.putSerializable("songNetInfo",musicFind);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+
+                    method(2);
+
                 }
             });
         }
     }
+
+    protected abstract void method( int i);
+
+
 }
 
 

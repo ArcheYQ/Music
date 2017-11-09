@@ -70,7 +70,12 @@ public class FindActivity extends AppCompatActivity {
                 Log.i("TAG2", "onCreate:1 ");
                 totalPage = MusicFindUtil.getInstance().getPage();
                 Log.i("totalPage", "totalPage1 " + totalPage);
-                findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext());
+                findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext()) {
+                    @Override
+                    protected void method(int i) {
+
+                    }
+                };
                 Log.i("TAG2", "onCreate:2 ");
                 runOnUiThread(new Runnable() {
                     @Override
@@ -187,7 +192,12 @@ public class FindActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         refreshlayout.finishRefresh();
-                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext());
+                        findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext()) {
+                            @Override
+                            protected void method(int i) {
+                                Toast.makeText(FindActivity.this, "method", Toast.LENGTH_SHORT).show();
+                            }
+                        };
                         Log.i("TAG2", "onCreate:2 ");
                         runOnUiThread(new Runnable() {
                             @Override
