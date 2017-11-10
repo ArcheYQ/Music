@@ -26,7 +26,7 @@ public class NetStateUtil {
                 NetworkInfo dataInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                 if (!wifiInfo.isConnected()&&dataInfo.isConnected()){
                     i = 1;
-                } else if (wifiInfo.isConnected() && dataInfo.isConnected()) {
+                } else if ((wifiInfo.isConnected() && dataInfo.isConnected())||(wifiInfo.isConnected() && !dataInfo.isConnected())) {
                     i = 2;
                 } else if (!wifiInfo.isConnected() && !dataInfo.isConnected()){
                     i = 0;
@@ -51,7 +51,7 @@ public class NetStateUtil {
                 }
                 if (!wifi&&data){
                     i = 1;
-                }else if (wifi && data){
+                }else if ((wifi && data)||(wifi && !data)){
                     i = 2;
                 }else if (!wifi && !data){
                     i = 0;
