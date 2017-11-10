@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,14 +14,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.music.R;
 import com.music.adapter.FindMusicAdapter;
+import com.music.bean.MusicFind;
 import com.music.util.HttpUtil;
 import com.music.util.MusicFindUtil;
+import com.music.util.NetStateUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -50,6 +55,7 @@ public class FindActivity extends AppCompatActivity {
     FindMusicAdapter findMusicAdapter;
     private Dialog progressDialog;
     MsgReceiver msgReceiver;
+    private int netState = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +64,7 @@ public class FindActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("findName");
         MusicFindUtil.getInstance().deleteDate();
         showProgressDialog();
+        netState = NetStateUtil.getNetWorkState(getBaseContext());
         HttpUtil.requestSongData(name, 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -71,9 +78,25 @@ public class FindActivity extends AppCompatActivity {
                 totalPage = MusicFindUtil.getInstance().getPage();
                 Log.i("totalPage", "totalPage1 " + totalPage);
                 findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext()) {
-                    @Override
-                    protected void method(int i) {
 
+                    @Override
+                    protected void getItemView(View itemView, final MusicFind musicFind) {
+                        itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                SharedPreferences preferences = getSharedPreferences("setting",MODE_PRIVATE);
+                                if (netState == 2 || (netState == 1&&preferences.getBoolean("net",true))){
+                                    Intent intent = new Intent(FindActivity.this, NetMusicActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("songNetInfo",musicFind);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                }else
+                                {
+                                    Toast.makeText(FindActivity.this, "当前网络状态不可以播放网络歌曲哦(；′⌒`)", Toast.LENGTH_SHORT).show();
+                                }}
+                        });
                     }
                 };
                 Log.i("TAG2", "onCreate:2 ");
@@ -127,12 +150,15 @@ public class FindActivity extends AppCompatActivity {
        IntentFilter intentFilter = new IntentFilter();
        intentFilter.addAction("com.example.communication.CHANGE");
        intentFilter.addAction("com.example.communication.LISTCHANGE");
+         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
        registerReceiver(msgReceiver, intentFilter);
    }
     public class MsgReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+                netState = NetStateUtil.getNetWorkState(context);}
             if (findMusicAdapter!=null){
                 findMusicAdapter.setPlay();
             }
@@ -194,9 +220,26 @@ public class FindActivity extends AppCompatActivity {
                         refreshlayout.finishRefresh();
                         findMusicAdapter = new FindMusicAdapter(MusicFindUtil.parseFindJOSNWithGSON(response), getBaseContext()) {
                             @Override
-                            protected void method(int i) {
-                                Toast.makeText(FindActivity.this, "method", Toast.LENGTH_SHORT).show();
+                            protected void getItemView(View itemView, final MusicFind musicFind) {
+                                itemView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        SharedPreferences preferences = getSharedPreferences("setting",MODE_PRIVATE);
+                                        if (netState == 2 || (netState == 1&&preferences.getBoolean("net",true))){
+                                            Intent intent = new Intent(FindActivity.this, NetMusicActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("songNetInfo",musicFind);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                        }else
+                                        {
+                                            Toast.makeText(FindActivity.this, "当前网络状态不可以播放网络歌曲哦(；′⌒`)", Toast.LENGTH_SHORT).show();
+                                        }}
+                                });
                             }
+
+
                         };
                         Log.i("TAG2", "onCreate:2 ");
                         runOnUiThread(new Runnable() {

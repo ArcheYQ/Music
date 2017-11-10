@@ -1,5 +1,6 @@
 package com.music.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,16 +44,25 @@ public class SettingActivity extends AppCompatActivity {
     EditText etWay;
     @Bind(R.id.btn_publish)
     Button btnPublish;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        SharedPreferences preferences = getSharedPreferences("setting",MODE_PRIVATE);
+        switchButton.setChecked(preferences.getBoolean("net",true));
+        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton switchButton, boolean b) {
+                SharedPreferences.Editor editor = getSharedPreferences("setting",MODE_PRIVATE).edit();
+                editor.putBoolean("net",b);
+                editor.apply();
+            }
+        });
     }
 
 
-    @OnClick({R.id.cb_suggestion, R.id.cb_false, R.id.btn_publish})
+    @OnClick({R.id.cb_suggestion, R.id.cb_false, R.id.btn_publish,R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.cb_suggestion:
@@ -93,6 +103,9 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
         }
     }

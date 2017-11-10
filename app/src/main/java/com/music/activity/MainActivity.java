@@ -20,7 +20,6 @@ import com.music.adapter.FragmentAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPager vpMain;
     @Bind(R.id.iv_down)
     ImageView ivDown;
+    @Bind(R.id.iv_setting)
+    ImageView ivSetting;
     private FragmentAdapter adapter;
     private int currentIndex;
     private int screenWidth;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_local, R.id.tv_network,R.id.iv_down})
+    @OnClick({R.id.tv_local, R.id.tv_network, R.id.iv_down,R.id.iv_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_local:
@@ -126,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.setClass(MainActivity.this, DownloadActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.iv_setting:
+                Intent intent1 = new Intent();
+                intent1.setClass(MainActivity.this, SettingActivity.class);
+                startActivity(intent1);
         }
     }
+
 }

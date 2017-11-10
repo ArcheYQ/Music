@@ -30,6 +30,15 @@
                 android:id="@+id/iv_down"
                 android:src="@drawable/down"
                 android:layout_centerVertical="true" />
+            <ImageView
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/iv_setting"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/setting" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

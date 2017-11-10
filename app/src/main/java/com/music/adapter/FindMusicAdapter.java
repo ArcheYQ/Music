@@ -91,14 +91,14 @@ public abstract class FindMusicAdapter extends RecyclerView.Adapter<FindMusicAda
                     intent.putExtras(bundle);
                     context.startActivity(intent);
 
-                    method(2);
+                    getItemView(itemView,musicFind);
 
                 }
             });
         }
     }
 
-    protected abstract void method( int i);
+    protected abstract void getItemView(View itemView, MusicFind musicFind);
 
 
 }

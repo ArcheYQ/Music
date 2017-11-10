@@ -63,10 +63,10 @@
                 app:sb_checked_color="@color/colorPrimary"
                 />
         </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="#e2dada"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="8dp"-->
+        <!--android:background="#e2dada"/>-->
     <TextView
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
@@ -167,10 +167,10 @@
             android:layout_toLeftOf="@+id/tv_false"
             android:layout_marginRight="15dp"/>
     </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#e2dada"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="8dp"-->
+        <!--android:background="#e2dada"/>-->
     <EditText
         android:id="@+id/et_content"
         android:textSize="14sp"
@@ -180,14 +180,14 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:hint="请填写您的建议。"
-        android:background="@color/white"/>
+        android:background="@null"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="#e2dada"/>
     <EditText
         android:id="@+id/et_way"
-        android:background="@color/white"
+        android:background="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by 雅倩宝宝 on 2017/9/20.
  */
 
-public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicFenViewHolder> {
+public abstract class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicFenViewHolder> {
     List<MusicFind> musicFinds;
     Context context;
 
@@ -68,17 +69,10 @@ public class MusicFenAdapter extends RecyclerView.Adapter<MusicFenAdapter.MusicF
                 tvFenleiSinger.setTextColor(Color.parseColor("#959595"));
                 tvFenleiSong.setTextColor(Color.parseColor("#000000"));
             }
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, NetMusicActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("songNetInfo",musicFind);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
-                }
-            });
+            getItemView(itemView,musicFind);
+
         }
     }
+
+    protected abstract void getItemView(View itemView,final MusicFind musicFind);
 }
