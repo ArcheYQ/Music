@@ -26,3 +26,5 @@
 
  欢迎界面
 ![Image text](./images/q.png)
+
+<img src="https://github.com/ArcheYQ/Music/raw/master/images/q.png" width="50%" />
