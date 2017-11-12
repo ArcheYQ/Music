@@ -24,5 +24,12 @@
 
 ## 界面截图：
 
- 欢迎界面
-![Image text](./images/q.png)
+![Image text](./images/1.png)
+
+![Image text](./images/2.png)
+
+![Image text](./images/3.png)
+
+![Image text](./images/4.png)
+
+
