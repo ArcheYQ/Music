@@ -37,9 +37,6 @@ public class MusicNotification extends Notification {
     private final String MUSIC_NOTIFICATION_ACTION_NPLAY = "musicnotificaion.To.NPLAY";
     private final String MUSIC_NOTIFICATION_ACTION_NNEXT = "musicnotificaion.To.NNEXT";
     private final String MUSIC_NOTIFICATION_ACTION_NPRE = "musicnotificaion.To.NPre";
-    private final int MUSIC_NOTIFICATION_VALUE_PLAY = 30001;
-    private final int MUSIC_NOTIFICATION_VALUE_NEXT = 30002;
-    private final int MUSIC_NOTIFICATION_VALUE_PRE =30003;
     private RemoteViews remoteViews;
     private Intent play=null,next=null,close = null;
     private Intent nplay=null,nnext=null,nclose = null;

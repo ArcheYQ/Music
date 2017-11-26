@@ -303,8 +303,6 @@ public class MusicActivity extends AppCompatActivity implements ViewPager.OnPage
                 if (isSeekBarChanging == true) {
                     return;
                 }
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

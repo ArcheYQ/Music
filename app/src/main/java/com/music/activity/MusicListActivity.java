@@ -139,15 +139,17 @@ public class MusicListActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (musicFenAdapter!=null){
             musicFenAdapter.setPlay();
         }
-        super.onResume();
+
     }
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(msgReceiver);
+
         super.onDestroy();
+        unregisterReceiver(msgReceiver);
     }
 }
